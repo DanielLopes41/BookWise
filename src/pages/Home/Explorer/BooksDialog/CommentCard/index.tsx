@@ -1,4 +1,3 @@
-import Image from 'next/image'
 import {
   AvatarContainer,
   CommentContainer,
@@ -6,33 +5,28 @@ import {
   TextContainer,
   TextSection,
 } from './styles'
-import Bookimg from '../../../../images/arquitetura-limpa.png'
+import { StyledStar } from '@/Components/StyledStar'
 import { Avatar } from '@/Components/Avatar'
 import { StarCollection } from '@/Components/StarCollection'
-export function Comment() {
+export function CommentCard() {
   return (
     <CommentContainer>
       <CommentContent>
         <AvatarContainer>
           <Avatar
-            src="https://avatars.githubusercontent.com/u/96553464?v=4"
-            alt="Imagem do usuário"
-            width={40}
+            src={'https://avatars.githubusercontent.com/u/96553464?v=4'}
             height={40}
+            width={40}
           />
           <div>
-            <p>Daniel Lopes</p>
+            <h1>Daniel Lopes</h1>
             <p>Hoje</p>
           </div>
           <StarCollection NumberOfStarChecked={4} />
         </AvatarContainer>
+
         <TextSection>
-          <Image src={Bookimg} alt="Capa do livro" />
           <TextContainer>
-            <section>
-              <h1>Título</h1>
-              <p>Autor</p>
-            </section>
             <p>
               Lorem ipsum dolor sit, amet consectetur adipisicing elit.
               Explicabo aut eum assumenda laudantium amet in dolor, maxime sit

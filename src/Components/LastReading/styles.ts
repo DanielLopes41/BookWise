@@ -1,9 +1,9 @@
 import { styled } from '@stitches/react'
 export const CommentContainer = styled('div', {
-  backgroundColor: '$gray700',
+  backgroundColor: '$gray600',
   borderRadius: '8px',
-  width: '65%',
   margin: 'auto',
+  width: '65%',
 })
 export const CommentContent = styled('div', {
   display: 'flex',
@@ -15,6 +15,12 @@ export const CommentContent = styled('div', {
 export const AvatarContainer = styled('div', {
   display: 'flex',
   gap: '$4',
+  img: {
+    width: '40px',
+    height: '40px',
+    borderRadius: '$full',
+    border: 'solid black 1px',
+  },
   span: {
     marginLeft: 'auto',
     section: {
@@ -29,9 +35,7 @@ export const TextContainer = styled('div', {
   display: 'flex',
   flexDirection: 'column',
   gap: '$4',
-  section: {
-    display: 'flex',
-    flexDirection: 'column',
+  span: {
     h1: {
       fontSize: '$md',
       color: '$gray100',
@@ -50,7 +54,6 @@ export const TextContainer = styled('div', {
 })
 export const TextSection = styled('div', {
   display: 'flex',
-  width: '90%',
   gap: '$5',
   justifyContent: 'space-between',
   img: {

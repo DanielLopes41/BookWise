@@ -3,40 +3,36 @@ import {
   CommentList,
   CommentListContainer,
   HomeContainer,
+  LastReadingContainer,
 } from './styles'
-import BookWiseLogo from '../../../Logo/Logo.png'
-import Image from 'next/image'
-import { Binoculars, CaretRight, ChartLineUp, SignIn } from 'phosphor-react'
+
+import { CaretRight, ChartLineUp } from 'phosphor-react'
 import { Comment } from './Comment'
-import { BookCard } from './BookCard'
+import Aside from '@/Components/Aside'
+import { LastReading } from '@/Components/LastReading'
+import { HomeBookCard } from './HomeBookCard'
+
 export default function Home() {
   return (
     <HomeContainer>
-      <aside>
-        <section>
-          <Image src={BookWiseLogo} alt="" width={150} quality={100} />
-          <div>
-            <p>
-              <ChartLineUp size={24} />
-              Início
-            </p>
-            <p>
-              <Binoculars size={24} />
-              Explorar
-            </p>
-          </div>
-        </section>
-        <p>
-          Fazer Login <SignIn color="#50B2C0" size={20} />
-        </p>
-      </aside>
-
+      <Aside />
       <CommentListContainer>
         <h1>
           <ChartLineUp /> Início
         </h1>
+        <LastReadingContainer>
+          <span>
+            <p>Sua última leitura</p>
+            <button>
+              Ver Todas <CaretRight size={16} />
+            </button>
+          </span>
+          <LastReading />
+        </LastReadingContainer>
         <CommentList>
-          <p>Avaliações mais recentes</p>
+          <span>
+            <p>Avaliações mais recentes</p>
+          </span>
           <Comment />
           <Comment />
           <Comment />
@@ -46,14 +42,14 @@ export default function Home() {
       <BookListContainer>
         <span>
           <p>Livros populares</p>
-          <p>
-            Ver todos <CaretRight />
-          </p>
+          <button>
+            Ver todos <CaretRight size={16} />
+          </button>
         </span>
-        <BookCard />
-        <BookCard />
-        <BookCard />
-        <BookCard />
+        <HomeBookCard />
+        <HomeBookCard />
+        <HomeBookCard />
+        <HomeBookCard />
       </BookListContainer>
     </HomeContainer>
   )
