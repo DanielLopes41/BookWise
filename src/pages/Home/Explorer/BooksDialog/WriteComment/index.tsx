@@ -12,42 +12,57 @@ import Rate from 'antd/lib/rate'
 import { StarButton } from '@/Components/StarButton'
 import { Avatar } from '@/Components/Avatar'
 import { useState } from 'react'
+import { api } from '@/pages/api/axios'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useSession } from 'next-auth/react'
 export interface setNewCommentProps {
-  setNewComment: React.Dispatch<
-    React.SetStateAction<{ TextAreaContent: string; starValue: number }[]>
-  >
+  bookId: string
 }
-export function WriteComment({ setNewComment }: setNewCommentProps) {
+
+export function WriteComment({ bookId }: setNewCommentProps) {
   const [TextAreaContent, setTextAreaContent] = useState<string>('')
   const [starValue, setStarValue] = useState<number>(1)
+  const session = useSession()
+  const queryClient = useQueryClient()
   function handleTextAreaChange(e: React.ChangeEvent<HTMLTextAreaElement>) {
     setTextAreaContent(e.target.value)
   }
+  function handleClearTextArea() {
+    setTextAreaContent('')
+  }
+  const mutation = useMutation({
+    mutationFn: async () => {
+      const payload = {
+        userId: session.data?.user.id,
+        bookId,
+        rate: starValue,
+        description: TextAreaContent,
+      }
 
+      const response = await api.post(`/users/ratings`, payload)
+      return response.data
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries(['ratings'])
+      handleClearTextArea()
+    },
+  })
   function handleStarSelect(newValue: number) {
     setStarValue(newValue)
   }
-  function handleSetNewComment() {
+  async function handleSetNewComment() {
     if (TextAreaContent !== '') {
-      setNewComment((state) => [{ TextAreaContent, starValue }, ...state])
-      handleClearTextArea()
+      await mutation.mutate()
     }
-  }
-  function handleClearTextArea() {
-    setTextAreaContent('')
   }
 
   return (
     <CommentContainer>
       <CommentContent>
         <AvatarContainer>
-          <Avatar
-            src="https://avatars.githubusercontent.com/u/96553464?v=4"
-            width={40}
-            height={40}
-          />
+          <Avatar src={session.data?.user.avatar_url} width={40} height={40} />
           <div>
-            <h1>Daniel Lopes</h1>
+            <h1>{session.data?.user.name}</h1>
           </div>
           <span>
             <Rate

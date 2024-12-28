@@ -1,10 +1,19 @@
 import { MagnifyingGlass } from 'phosphor-react'
 import { SearchBarC, SearchBarContainer } from './styles'
-
-export function SearchBar() {
+export interface SearchBarProps {
+  onchange: () => void
+  onkeydown: () => void
+  value: string
+}
+export function SearchBar({ onchange, onkeydown, value }: SearchBarProps) {
   return (
     <SearchBarContainer>
-      <SearchBarC placeholder="Buscar livro ou autor" />
+      <SearchBarC
+        value={value}
+        onKeyDown={onkeydown}
+        onChange={onchange}
+        placeholder="Buscar livro ou autor"
+      />
       <MagnifyingGlass size={20} />
     </SearchBarContainer>
   )

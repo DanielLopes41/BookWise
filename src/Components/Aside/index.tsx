@@ -1,16 +1,30 @@
 import { Binoculars, ChartLineUp, SignIn, SignOut, User } from 'phosphor-react'
-import BookWiseLogo from '../../../Logo/Logo.png'
+import BookWiseLogo from '../../../Logo/Logo.jpg'
 import Image from 'next/image'
 import { AsideContainer } from './styles'
 import { Avatar } from '../Avatar'
 import { RouteIndicator } from '../RouteIndicator'
+import { signOut, useSession } from 'next-auth/react'
+import Cookies from 'js-cookie'
+import AuthDialog from '@/pages/Home/Explorer/AuthDialog'
+import * as Dialog from '@radix-ui/react-dialog'
+import { useEffect, useState } from 'react'
+import { RouteButton } from './RouteButton'
 import { useRouter } from 'next/router'
-export default function Aside() {
-  const router = useRouter()
 
-  async function handleNavigate(Route: string) {
-    await router.push(`/${Route}`)
-  }
+export default function Aside() {
+  const { pathname } = useRouter()
+  const session = useSession()
+  const { status } = session
+  const [Token, setToken] = useState(false)
+
+  useEffect(() => {
+    setToken(Cookies.get('GuestToken'))
+    if (status === 'authenticated') {
+      Cookies.remove('GuestToken')
+      setToken(Cookies.get('GuestToken'))
+    }
+  }, [status])
 
   return (
     <AsideContainer>
@@ -18,53 +32,66 @@ export default function Aside() {
         <Image src={BookWiseLogo} alt="" width={130} quality={100} />
         <div>
           <section>
-            <RouteIndicator display={router.pathname === '/Home'} />
-            <button
-              onClick={() => {
-                handleNavigate('Home')
-              }}
-            >
-              <ChartLineUp size={24} />
-              <p>Início</p>
-            </button>
+            <RouteIndicator display={pathname === '/Home'} />
+            <RouteButton
+              route="/Home"
+              icon={<ChartLineUp size={24} />}
+              label="Início"
+            />
           </section>
           <section>
-            <RouteIndicator display={router.pathname === '/Home/Explorer'} />
-            <button
-              onClick={() => {
-                handleNavigate('Home/Explorer')
-              }}
-            >
-              <Binoculars size={24} />
-              <p>Explorar</p>
-            </button>
+            <RouteIndicator display={pathname === '/Home/Explorer'} />
+            <RouteButton
+              route="/Home/Explorer"
+              icon={<Binoculars size={24} />}
+              label="Explorar"
+            />
           </section>
           <section>
-            <RouteIndicator display={router.pathname === '/Home/Profile'} />
-            <button
-              onClick={() => {
-                handleNavigate('Home/Profile')
-              }}
-            >
-              <User size={24} />
-              <p>Perfil</p>
-            </button>
+            {Token ? null : (
+              <>
+                <RouteIndicator display={pathname === '/Home/Profile'} />
+                <RouteButton
+                  route="/Home/Profile"
+                  icon={<User size={24} />}
+                  label="Perfil"
+                />
+              </>
+            )}
           </section>
         </div>
       </section>
-      <p>
-        Fazer Login <SignIn color="#50B2C0" size={20} />
-      </p>
-      <span>
-        <Avatar
-          src="https://avatars.githubusercontent.com/u/96553464?v=4"
-          alt="Imagem do usuário"
-          width={32}
-          height={32}
-        />
-        Daniel
-        <SignOut size={20} color="#E25858" />
-      </span>
+      {Token ? (
+        <span>
+          <p>Fazer Login</p>
+          <Dialog.Root>
+            <Dialog.Trigger asChild>
+              <button>
+                <SignIn color="#50B2C0" size={20} />
+              </button>
+            </Dialog.Trigger>
+            <AuthDialog />
+          </Dialog.Root>
+        </span>
+      ) : null}
+      {status === 'authenticated' ? (
+        <span>
+          <Avatar
+            src={session?.data?.user.avatar_url}
+            alt="Imagem do usuário"
+            width={32}
+            height={32}
+          />
+          {session?.data?.user.name}
+          <button
+            onClick={() => {
+              signOut()
+            }}
+          >
+            <SignOut size={20} color="#E25858" />
+          </button>
+        </span>
+      ) : null}
     </AsideContainer>
   )
 }

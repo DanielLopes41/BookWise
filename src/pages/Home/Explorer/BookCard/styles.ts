@@ -4,7 +4,7 @@ export const BookCardContainer = styled('div', {
   backgroundColor: '$gray700',
   position: 'relative',
   padding: '$4 $5',
-  height: 184,
+  maxHeight: 184,
   div: {
     gap: '$5',
     justifyContent: 'center',
@@ -34,7 +34,7 @@ export const BookCardContent = styled('div', {
         marginRight: '-8px',
       },
       nav: {
-        marginLeft: '-8px',
+        marginLeft: '-9px',
       },
     },
   },
@@ -45,10 +45,17 @@ export const BookCardContent = styled('div', {
 })
 export const TextContainer = styled('div', {
   padding: '0 $4 4.3rem 0 !important',
+  width: 136,
+  height: 136,
   h1: {
     color: '$gray100',
     fontSize: '$md',
     lineHeight: '140%',
+    overflow: 'hidden',
+    display: '-webkit-box',
+    '-webkit-line-clamp': '2',
+    '-webkit-box-orient': 'vertical',
+    textOverflow: 'ellipsis',
   },
   p: {
     color: '$gray400',

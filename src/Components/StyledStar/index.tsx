@@ -1,21 +1,31 @@
-import { Star } from 'phosphor-react'
-import { LeftHalfStar, RightHalfStar, StarContainer } from './styles'
-export interface StyledStarProps {
-  Filled?: boolean
-  starNumber: number
+import { Star, StarHalf } from 'phosphor-react'
+import { StarContainer } from './styles'
+
+interface StarButtonProps {
+  starValue: number
   index: number
 }
-export function StyledStar({ starNumber, index }: StyledStarProps) {
-  const isFilledLeft = starNumber >= index + 0.5
-  const isFilledRight = starNumber >= index + 1
+
+export function StyledStar({ index, starValue }: StarButtonProps) {
+  const isHalfStar = starValue >= index && starValue < index + 1
+  const isFullStar = starValue >= index + 1
+
+  console.log({
+    index,
+    starValue,
+    isHalfStar,
+    isFullStar,
+  })
+
   return (
     <StarContainer>
-      <LeftHalfStar>
-        <Star size={16} weight={isFilledLeft ? 'fill' : 'regular'} />
-      </LeftHalfStar>
-      <RightHalfStar>
-        <Star size={16} weight={isFilledRight ? 'fill' : 'regular'} />
-      </RightHalfStar>
+      {isFullStar ? (
+        <Star size={16} weight={isFullStar ? 'fill' : 'regular'} />
+      ) : isHalfStar ? (
+        <StarHalf size={16} weight={isHalfStar ? 'fill' : 'regular'} />
+      ) : (
+        <Star size={16} weight="regular" />
+      )}
     </StarContainer>
   )
 }

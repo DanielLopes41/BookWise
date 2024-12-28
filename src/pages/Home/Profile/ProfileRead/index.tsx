@@ -1,41 +1,48 @@
 import Image from 'next/image'
-import Bookimg from '../../../../../images/14-habitos-de-desenvolvedores-altamente-produtivos.png'
-import { StyledStar } from '@/Components/StyledStar'
+import Bookimg from '../../../../../public/images/books/entendendo-algoritmos.jpg'
 import {
   AvatarSection,
   BookInfo,
   Container,
   Content,
   Details,
-  Rating,
   TextSection,
 } from './styles'
 import { StarCollection } from '@/Components/StarCollection'
-
-export function ProfileRead() {
+export interface ProfileReadProps {
+  Author: string
+  Rate: number
+  Title: string
+  content: string
+  coverUrl: string
+}
+export function ProfileRead({
+  Author,
+  Rate,
+  Title,
+  content,
+  coverUrl,
+}: ProfileReadProps) {
   return (
     <Container>
       <Content>
         <AvatarSection>
-          <Image src={Bookimg} width={98} height={134} alt="Capa do livro" />
+          <Image
+            src={`${coverUrl.replace('public', '')}`}
+            width={98}
+            height={134}
+            alt="Capa do livro"
+          />
           <Details>
             <BookInfo>
-              <h1>Nome do livro</h1>
-              <p>Autor</p>
+              <h1>{Title}</h1>
+              <p>{Author}</p>
             </BookInfo>
-            <StarCollection />
+            <StarCollection NumberOfStarChecked={Rate} />
           </Details>
         </AvatarSection>
         <TextSection>
-          <p>
-            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Explicabo
-            aut eum assumenda laudantium amet in dolor, maxime sit nesciunt
-            repudiandae ex modi recusandae perferendis nisi culpa enim odit non
-            consequuntur. Lorem ipsum dolor sit, amet consectetur adipisicing
-            elit. Explicabo aut eum assumenda laudantium amet in dolor, maxime
-            sit nesciunt repudiandae ex modi recusandae perferendis nisi culpa
-            enim odit non consequuntur.
-          </p>
+          <p>{content}</p>
         </TextSection>
       </Content>
     </Container>

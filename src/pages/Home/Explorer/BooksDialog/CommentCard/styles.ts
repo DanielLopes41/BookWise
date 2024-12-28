@@ -48,17 +48,17 @@ export const TextContainer = styled('div', {
     h1: {
       fontSize: '$md',
       color: '$gray100',
-      fontWeigth: '160%',
+      lineHeigth: '160%',
     },
     p: {
       fontSize: '$sm',
       color: '$gray400',
-      fontWeigth: '160%',
+      lineHeigth: '160%',
     },
   },
   '> p': {
     color: '$gray300',
-    fontWeigth: '160%',
+    lineHeigth: '160%',
   },
 })
 export const TextSection = styled('div', {

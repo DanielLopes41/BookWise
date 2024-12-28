@@ -5,19 +5,34 @@ import {
   HomeBookCardContent,
 } from './styles'
 import Image from 'next/image'
-import BookImg from '../../../../images/codigo-limpo.png'
-
-export function HomeBookCard() {
+export interface HomeBookCardProps {
+  Title: string
+  Author: string
+  Rate: number
+  coverUrl: string
+}
+export function HomeBookCard({
+  coverUrl,
+  Title,
+  Author,
+  Rate,
+}: HomeBookCardProps) {
+  console.log(coverUrl)
   return (
     <HomeBookCardContainer>
       <HomeBookCardContent>
-        <Image src={BookImg} alt="Capa do livro" />
+        <Image
+          src={`${coverUrl.replace('public', '')}`}
+          width={64}
+          height={94}
+          alt="Capa do livro"
+        />
         <div>
           <TextContainer>
-            <h1>A revolução dos bichos</h1>
-            <p>George Orwell</p>
+            <h1>{Title}</h1>
+            <p>{Author}</p>
           </TextContainer>
-          <StarCollection NumberOfStarChecked={4} />
+          <StarCollection NumberOfStarChecked={Rate} />
         </div>
       </HomeBookCardContent>
     </HomeBookCardContainer>

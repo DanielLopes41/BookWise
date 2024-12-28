@@ -10,7 +10,7 @@ export function StarCollection({ NumberOfStarChecked }: StarCollectionProps) {
         return (
           <StyledStar
             key={index}
-            starNumber={NumberOfStarChecked}
+            starValue={NumberOfStarChecked}
             index={index}
           />
         )

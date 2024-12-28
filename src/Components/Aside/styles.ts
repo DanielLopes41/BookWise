@@ -17,6 +17,18 @@ export const AsideContainer = styled('aside', {
     gap: '$3',
     padding: '$1',
     alignItems: 'center',
+    button: {
+      all: 'unset',
+      color: '$gray400',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'space-beetween',
+      gap: '$3',
+      padding: '$2 0',
+      '&:hover': {
+        cursor: 'pointer',
+      },
+    },
   },
   span: {
     color: '$gray200',
@@ -25,6 +37,13 @@ export const AsideContainer = styled('aside', {
     gap: '$3',
     padding: '$1',
     alignItems: 'center',
+    button: {
+      all: 'unset',
+      lineHeight: '0',
+      '&:hover': {
+        cursor: 'pointer',
+      },
+    },
   },
   section: {
     display: 'flex',

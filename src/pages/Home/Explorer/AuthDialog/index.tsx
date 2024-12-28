@@ -1,9 +1,10 @@
 import * as Dialog from '@radix-ui/react-dialog'
 import { Close, Content, Overlay } from './styles'
-import GoogleImg from '../../../../../Logo/logos_google-icon.png'
-import GithubImg from '../../../../../Logo/akar-icons_github-fill.png'
+import GoogleImg from '../../../../../Logo/logos_google-icon.jpg'
+import GithubImg from '../../../../../Logo/akar-icons_github-fill.jpg'
 import Image from 'next/image'
 import { X } from 'phosphor-react'
+import { signIn } from 'next-auth/react'
 export default function AuthDialog() {
   return (
     <Dialog.Portal>
@@ -14,7 +15,7 @@ export default function AuthDialog() {
         </Close>
         <h1>Faça login para deixar sua avaliação</h1>
         <section>
-          <button>
+          <button onClick={() => signIn('google')}>
             <Image
               src={GoogleImg}
               width={32}
@@ -23,7 +24,8 @@ export default function AuthDialog() {
             />
             <p>Entrar com Google</p>
           </button>
-          <button>
+
+          <button onClick={() => signIn('github')}>
             <Image
               src={GithubImg}
               width={32}

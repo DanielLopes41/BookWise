@@ -14,16 +14,57 @@ import { CommentCard } from './CommentCard'
 import AuthDialog from '../AuthDialog'
 import { WriteComment } from './WriteComment'
 import { NewCommentCard } from './NewCommentCard'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useQuery } from '@tanstack/react-query'
+import { api } from '@/pages/api/axios'
+import { Comment } from '../../Comment'
+import { useSession } from 'next-auth/react'
 
 interface Comment {
   TextAreaContent: string
   starValue: number
 }
 
-export function BooksDialog() {
-  const [newComment, setNewComment] = useState<Comment[]>([])
-  const comments = [1, 2, 3, 4, 5]
+export interface BooksDialogProps {
+  name: string
+  author: string
+  coverUrl: string
+  bookId: string
+}
+
+export function BooksDialog({
+  author,
+  coverUrl,
+  name,
+  bookId,
+}: BooksDialogProps) {
+  const { data: Books = [] } = useQuery({
+    queryKey: ['books'],
+    queryFn: async () => {
+      const response = await api.get(`/books`)
+      return response.data
+    },
+  })
+  const { status } = useSession()
+  const session = useSession()
+  const currentBook = Books.find((book) => book.name === name)
+  const OwnComments = currentBook?.ratings
+    ?.filter((rating) => rating.user.id === session.data?.user.id)
+    .reverse()
+  const CommentsWithoutOwn = currentBook?.ratings
+    ?.filter((rating) => rating.user.id !== session.data?.user.id)
+    .reverse()
+  const [isOpenWriteComment, setOpenWriteComment] = useState(false)
+  const averageRate =
+    currentBook && currentBook.ratings && currentBook.ratings.length > 0
+      ? currentBook.ratings.reduce((acc, rating) => acc + rating.rate, 0) /
+        currentBook.ratings.length
+      : 0
+
+  if (!currentBook) {
+    return <p>Livro não encontrado.</p>
+  }
+
   return (
     <Dialog.Portal>
       <Overlay />
@@ -33,28 +74,54 @@ export function BooksDialog() {
             <X size={24} />
           </CloseButton>
           <ModalContent>
-            <DetailedBook />
+            <DetailedBook
+              name={name}
+              author={author}
+              coverUrl={coverUrl}
+              rate={averageRate}
+              ratings={currentBook.ratings.length}
+              pages={currentBook.total_pages}
+              category={currentBook.categories}
+            />
           </ModalContent>
           <span>
             <p>Avaliações</p>
-            <Dialog.Root>
-              <Dialog.Trigger asChild>
-                <button>Avaliar</button>
-              </Dialog.Trigger>
-              <AuthDialog />
-            </Dialog.Root>
+            {status === 'unauthenticated' ? (
+              <Dialog.Root>
+                <Dialog.Trigger asChild>
+                  <button>Avaliar</button>
+                </Dialog.Trigger>
+                <AuthDialog />
+              </Dialog.Root>
+            ) : (
+              <button
+                onClick={() => {
+                  setOpenWriteComment(!isOpenWriteComment)
+                }}
+              >
+                Avaliar
+              </button>
+            )}
           </span>
           <CommentList>
-            <WriteComment setNewComment={setNewComment} />
-            {newComment.map((comment, index) => (
+            {isOpenWriteComment ? <WriteComment bookId={bookId} /> : null}
+            {OwnComments.map((comment, index) => (
               <NewCommentCard
+                createdAt={comment.created_at}
                 key={index}
-                content={comment.TextAreaContent}
-                NumberOfStarChecked={comment.starValue}
+                content={comment.description}
+                NumberOfStarChecked={comment.rate}
               />
             ))}
-            {comments.map((_, index) => (
-              <CommentCard key={index} />
+            {CommentsWithoutOwn.map((rating, index) => (
+              <CommentCard
+                avatarUrl={rating.avatarUrl}
+                content={rating.description || ''}
+                createdAt={rating.created_at}
+                rate={rating.rate}
+                userName={rating.userName}
+                key={index}
+              />
             ))}
           </CommentList>
         </ContentContainer>

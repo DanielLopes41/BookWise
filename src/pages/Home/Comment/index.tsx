@@ -6,39 +6,66 @@ import {
   TextContainer,
   TextSection,
 } from './styles'
-import Bookimg from '../../../../images/arquitetura-limpa.png'
+import Bookimg from '../../../../public/images/books/codigo-limpo.jpg'
 import { Avatar } from '@/Components/Avatar'
 import { StarCollection } from '@/Components/StarCollection'
-export function Comment() {
+import { formatDistanceToNow } from 'date-fns'
+import { ptBR } from 'date-fns/locale'
+export interface CommentProps {
+  name: string
+  avatarUrl: string
+  rate: number
+  description: string
+  author: string
+  coverUrl: string
+  title: string
+  createdAt: string
+}
+export function Comment({
+  name,
+  avatarUrl,
+  rate,
+  description,
+  author,
+  coverUrl,
+  title,
+  createdAt,
+}: CommentProps) {
   return (
     <CommentContainer>
       <CommentContent>
         <AvatarContainer>
           <Avatar
-            src="https://avatars.githubusercontent.com/u/96553464?v=4"
+            src={avatarUrl}
             alt="Imagem do usuário"
             width={40}
             height={40}
           />
           <div>
-            <p>Daniel Lopes</p>
-            <p>Hoje</p>
+            <p>{name}</p>
+            <p>
+              {formatDistanceToNow(createdAt, {
+                addSuffix: true,
+                locale: ptBR,
+              })}
+            </p>
           </div>
-          <StarCollection NumberOfStarChecked={4} />
+          <StarCollection NumberOfStarChecked={rate} />
         </AvatarContainer>
         <TextSection>
-          <Image src={Bookimg} alt="Capa do livro" />
+          <Image
+            src={`${coverUrl.replace('public', '')}`}
+            width={108}
+            height={152}
+            quality={100}
+            alt="Capa do livro"
+          />
           <TextContainer>
             <section>
-              <h1>Título</h1>
-              <p>Autor</p>
+              <h1>{title}</h1>
+              <p>{author}</p>
             </section>
-            <p>
-              Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-              Explicabo aut eum assumenda laudantium amet in dolor, maxime sit
-              nesciunt repudiandae ex modi recusandae perferendis nisi culpa
-              enim odit non consequuntur.
-            </p>
+            <p>{description}</p>
           </TextContainer>
         </TextSection>
       </CommentContent>

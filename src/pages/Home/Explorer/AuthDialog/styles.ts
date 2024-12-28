@@ -7,6 +7,8 @@ const nunito = Nunito({
 })
 export const Overlay = styled(Dialog.Overlay, {
   position: 'fixed',
+  inset: 0,
+  backgroundColor: 'rgba(0, 0, 0, 0.5)',
 })
 
 export const Content = styled(Dialog.Content, {
@@ -70,4 +72,11 @@ export const Close = styled(Dialog.Close, {
   position: 'absolute',
   top: 15,
   right: 15,
+  padding: '$2',
+
+  '&:hover': {
+    borderRadius: '4px',
+    backgroundColor: '$gray500',
+    cursor: 'pointer',
+  },
 })

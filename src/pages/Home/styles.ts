@@ -92,6 +92,7 @@ export const BookListContainer = styled('div', {
   'span:first-child': {
     display: 'flex',
     justifyContent: 'space-between',
+    alignItems: 'center',
     '& p:first-child': {
       fontSize: '$sm',
       color: '$gray100',
@@ -99,14 +100,48 @@ export const BookListContainer = styled('div', {
     },
     '& button': {
       all: 'unset',
-      color: '$purple100',
       display: 'flex',
-      alignItems: 'center',
-      gap: '$2',
+      padding: '$2 $3',
+      borderRadius: '4px',
+      h1: {
+        fontSize: '$sm',
+        color: '$purple100',
+        display: 'flex',
+        alignItems: 'center',
+        gap: '$2',
+        opacity: 1,
+      },
+      '&:hover': {
+        backgroundColor: 'rgba(117, 114, 228, 0.06)',
+        cursor: 'pointer',
+      },
     },
   },
 })
 export const LastReadingContainer = styled('div', {
+  p: {
+    color: '$gray100',
+    fontSize: '$sm',
+    alignItems: 'center',
+  },
+  button: {
+    all: 'unset !important',
+    display: 'flex !important',
+    padding: '$2 $3 !important',
+    borderRadius: '4px !important',
+    '&:hover ': {
+      backgroundColor: 'rgba(117, 114, 228, 0.06) !important',
+      cursor: 'pointer !important',
+    },
+    h1: {
+      fontSize: '$sm',
+      color: '$purple100',
+      display: 'flex',
+      alignItems: 'center',
+      gap: '$2',
+      opacity: 1,
+    },
+  },
   '> div': {
     marginTop: '$6',
   },

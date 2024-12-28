@@ -6,30 +6,51 @@ import {
   TextContainer,
   TextSection,
 } from './styles'
-import Bookimg from '../../../images/14-habitos-de-desenvolvedores-altamente-produtivos.png'
 import { StarCollection } from '../StarCollection'
-export function LastReading() {
+import { formatDistanceToNow } from 'date-fns'
+import { ptBR } from 'date-fns/locale'
+export interface LastReadingProps {
+  coverUrl: string
+  createdAt: string
+  content: string
+  Author: string
+  Title: string
+  Rate: number
+}
+export function LastReading({
+  Author,
+  Rate,
+  Title,
+  content,
+  coverUrl,
+  createdAt,
+}: LastReadingProps) {
   return (
     <CommentContainer>
       <CommentContent>
         <TextSection>
-          <Image src={Bookimg} alt="Capa do livro" />
+          <Image
+            src={`${coverUrl.replace('public', '')}`}
+            alt="Capa do livro"
+            width={108}
+            height={152}
+          />
 
           <TextContainer>
             <AvatarContainer>
-              <p>Há 2 dias</p>
-              <StarCollection NumberOfStarChecked={4} />
+              <p>
+                {formatDistanceToNow(createdAt, {
+                  addSuffix: true,
+                  locale: ptBR,
+                })}
+              </p>
+              <StarCollection NumberOfStarChecked={Rate} />
             </AvatarContainer>
             <span>
-              <h1>Título</h1>
-              <p>Autor</p>
+              <h1>{Title}</h1>
+              <p>{Author}</p>
             </span>
-            <p>
-              Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-              Explicabo aut eum assumenda laudantium amet in dolor, maxime sit
-              nesciunt repudiandae ex modi recusandae perferendis nisi culpa
-              enim odit non consequuntur.
-            </p>
+            <p>{content}</p>
           </TextContainer>
         </TextSection>
       </CommentContent>

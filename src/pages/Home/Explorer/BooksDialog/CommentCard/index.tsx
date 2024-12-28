@@ -5,34 +5,45 @@ import {
   TextContainer,
   TextSection,
 } from './styles'
+import { formatDistance } from 'date-fns'
+import { ptBR } from 'date-fns/locale'
 import { StyledStar } from '@/Components/StyledStar'
 import { Avatar } from '@/Components/Avatar'
 import { StarCollection } from '@/Components/StarCollection'
-export function CommentCard() {
+export interface CommentCardProps {
+  rate: number
+  avatarUrl: string
+  userName: string
+  createdAt: string
+  content: string
+}
+export function CommentCard({
+  rate,
+  avatarUrl,
+  userName,
+  createdAt,
+  content,
+}: CommentCardProps) {
   return (
     <CommentContainer>
       <CommentContent>
         <AvatarContainer>
-          <Avatar
-            src={'https://avatars.githubusercontent.com/u/96553464?v=4'}
-            height={40}
-            width={40}
-          />
+          <Avatar src={avatarUrl} height={40} width={40} />
           <div>
-            <h1>Daniel Lopes</h1>
-            <p>Hoje</p>
+            <h1>{userName}</h1>
+            <p>
+              {formatDistance(new Date(createdAt), new Date(), {
+                addSuffix: true,
+                locale: ptBR,
+              })}
+            </p>
           </div>
-          <StarCollection NumberOfStarChecked={4} />
+          <StarCollection NumberOfStarChecked={rate} />
         </AvatarContainer>
 
         <TextSection>
           <TextContainer>
-            <p>
-              Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-              Explicabo aut eum assumenda laudantium amet in dolor, maxime sit
-              nesciunt repudiandae ex modi recusandae perferendis nisi culpa
-              enim odit non consequuntur.
-            </p>
+            <p>{content}</p>
           </TextContainer>
         </TextSection>
       </CommentContent>

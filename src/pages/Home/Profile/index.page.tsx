@@ -12,8 +12,31 @@ import { SearchBar } from '@/Components/SearchBar'
 import { BookmarkSimple, BookOpen, Books, User, UserList } from 'phosphor-react'
 import { ProfileRead } from './ProfileRead'
 import { Avatar } from '@/Components/Avatar'
-
+import { useQuery } from '@tanstack/react-query'
+import { api } from '@/pages/api/axios'
+import { formatDistanceToNow } from 'date-fns'
+import { ptBR } from 'date-fns/locale'
+import Cookies from 'js-cookie'
+import { useSession } from 'next-auth/react'
+import { useRouter } from 'next/router'
+import { useEffect } from 'react'
 export default function Profile() {
+  const { data: OwnRatings } = useQuery({
+    queryKey: ['OwnRatings'],
+    queryFn: async () => {
+      const response = await api.get(`/users/ratings/userRatings`)
+      return response.data
+    },
+  })
+
+  const { status } = useSession()
+  const router = useRouter()
+  useEffect(() => {
+    const Token = Cookies.get('GuestToken') || false
+    if (status === 'unauthenticated' && !Token) {
+      router.push('/')
+    }
+  }, [status, router])
   return (
     <Container>
       <Aside />
@@ -23,18 +46,26 @@ export default function Profile() {
         </p>
         <SearchBar />
         <ReadsContainer>
-          <ReadContainer>
-            <p>Há 2 dias</p>
-            <ProfileRead />
-          </ReadContainer>
-          <ReadContainer>
-            <p>Há 2 dias</p>
-            <ProfileRead />
-          </ReadContainer>
-          <ReadContainer>
-            <p>Há 2 dias</p>
-            <ProfileRead />
-          </ReadContainer>
+          {OwnRatings?.map((OwnRating, index) => {
+            return (
+              <ReadContainer key={index}>
+                <p>
+                  {formatDistanceToNow(OwnRating.created_at, {
+                    addSuffix: true,
+                    locale: ptBR,
+                  })}
+                </p>
+                <ProfileRead
+                  Author={OwnRating.author}
+                  Rate={OwnRating.rate}
+                  Title={OwnRating.title}
+                  content={OwnRating.description}
+                  coverUrl={OwnRating.coverUrl}
+                  key={OwnRating.id}
+                />
+              </ReadContainer>
+            )
+          })}
         </ReadsContainer>
       </MainContainer>
       <ProfileContainer>

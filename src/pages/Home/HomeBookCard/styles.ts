@@ -5,8 +5,9 @@ export const HomeBookCardContainer = styled('div', {
   position: 'relative',
   padding: '$4 $5',
   borderRadius: '8px',
-  '& :hover': {
+  '&:hover': {
     cursor: 'pointer',
+    outline: '2px solid $gray600',
   },
 })
 
@@ -14,6 +15,7 @@ export const HomeBookCardContent = styled('div', {
   display: 'flex',
   width: '20rem',
   gap: '$6',
+
   '> div': {
     display: 'flex',
     flexDirection: 'column',
@@ -41,6 +43,11 @@ export const TextContainer = styled('div', {
     color: '$gray100',
     fontSize: '$md',
     lineHeight: '140%',
+    display: '-webkit-box',
+    '-webkit-line-clamp': '2',
+    '-webkit-box-orient': 'vertical',
+    textOverflow: 'ellipsis',
+    overflow: 'hidden',
   },
   p: {
     color: '$gray400',

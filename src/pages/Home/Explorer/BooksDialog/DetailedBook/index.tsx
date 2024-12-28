@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import Bookimg from '../../../../../../images/14-habitos-de-desenvolvedores-altamente-produtivos.png'
+import Bookimg from '../../../../../../public/images/books/14-habitos-de-desenvolvedores-altamente-produtivos.jpg'
 
 import {
   AvatarSection,
@@ -10,24 +10,48 @@ import {
   Rating,
   TextSection,
 } from './styles'
-import { StyledStar } from '@/Components/StyledStar'
 import { BookmarkSimple, BookOpen } from 'phosphor-react'
 import { StarCollection } from '@/Components/StarCollection'
-
-export function DetailedBook() {
+import { pages } from 'next/dist/build/templates/app-page'
+export interface DetailedBookProps {
+  name: string
+  author: string
+  coverUrl: string
+  rate: number
+  ratings: number
+  pages: number
+  category: [string]
+}
+export function DetailedBook({
+  name,
+  author,
+  coverUrl,
+  rate,
+  ratings,
+  pages,
+  category,
+}: DetailedBookProps) {
   return (
     <Container>
       <Content>
         <AvatarSection>
-          <Image src={Bookimg} width={172} height={242} alt="Capa do livro" />
+          <Image
+            src={`${coverUrl.replace('public', '')}`}
+            width={172}
+            height={242}
+            alt="Capa do livro"
+          />
           <Details>
             <BookInfo>
-              <h1>Nome do livro</h1>
-              <p>Autor</p>
+              <h1>{name}</h1>
+              <p>{author}</p>
             </BookInfo>
             <div>
-              <StarCollection StarNumber={4} />
-              <p>3 avaliações</p>
+              <StarCollection NumberOfStarChecked={rate} />
+              <p>
+                {ratings}
+                {ratings > 1 ? ' avaliações' : ' avaliação'}
+              </p>
             </div>
           </Details>
         </AvatarSection>
@@ -37,14 +61,14 @@ export function DetailedBook() {
               <BookmarkSimple size={24} />
               <span>
                 <p>Categoria</p>
-                <h1>Computação, educação</h1>
+                <h1>{category}</h1>
               </span>
             </section>
             <section>
               <BookOpen size={24} />
               <span>
                 <p>Páginas</p>
-                <h1>160</h1>
+                <h1>{pages}</h1>
               </span>
             </section>
           </div>

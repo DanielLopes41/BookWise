@@ -7,27 +7,38 @@ import {
 } from './styles'
 import { Avatar } from '@/Components/Avatar'
 import { StarCollection } from '@/Components/StarCollection'
+import { formatDistance } from 'date-fns'
+import { ptBR } from 'date-fns/locale'
+import { useSession } from 'next-auth/react'
 export interface NewCommentProps {
   content: string
   NumberOfStarChecked: number
+  createdAt: string
 }
 export function NewCommentCard({
   content,
   NumberOfStarChecked,
+  createdAt,
 }: NewCommentProps) {
+  const session = useSession()
   return (
     <CommentContainer>
       <CommentContent>
         <AvatarContainer>
           <Avatar
-            src="https://avatars.githubusercontent.com/u/96553464?v=4"
+            src={session.data?.user.avatar_url}
             alt="Imagem do usuário"
             width={40}
             height={40}
           />
           <div>
-            <h1>Daniel Lopes</h1>
-            <p>Hoje</p>
+            <h1>{session.data?.user.name}</h1>
+            <p>
+              {formatDistance(new Date(createdAt), new Date(), {
+                addSuffix: true,
+                locale: ptBR,
+              })}
+            </p>
           </div>
           <StarCollection NumberOfStarChecked={NumberOfStarChecked} />
         </AvatarContainer>

@@ -15,6 +15,16 @@ export const CommentContent = styled('div', {
 export const AvatarContainer = styled('div', {
   display: 'flex',
   gap: '$4',
+  div: {
+    '& p:first-of-type': {
+      color: '$gray100',
+      fontSize: '$md',
+    },
+    '& p:last-of-type': {
+      color: '$gray400',
+      fontSize: '$sm',
+    },
+  },
   span: {
     marginLeft: 'auto',
     section: {
@@ -29,6 +39,7 @@ export const TextContainer = styled('div', {
   display: 'flex',
   flexDirection: 'column',
   gap: '$4',
+  marginRight: 'auto',
   section: {
     display: 'flex',
     flexDirection: 'column',

@@ -10,6 +10,11 @@ export const Button = styled('button', {
         alignItems: 'center',
         backgroundColor: '$purple200',
         color: '$gray100',
+        border: '1px solid $gray800',
+        '&:hover': {
+          cursor: 'pointer',
+          border: '1px solid $purple100',
+        },
       },
       false: {
         all: 'unset',
@@ -19,6 +24,9 @@ export const Button = styled('button', {
         alignItems: 'center',
         backgroundColor: 'inherit',
         color: '$purple100',
+        '&:hover': {
+          cursor: 'pointer',
+        },
       },
     },
   },

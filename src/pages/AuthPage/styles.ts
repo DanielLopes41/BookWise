@@ -66,3 +66,8 @@ export const AuthButton = styled('button', {
     cursor: 'pointer',
   },
 })
+export const AuthError = styled('p', {
+  color: '#f75a68',
+  marginBottom: '$4',
+  fontSize: '$3',
+})

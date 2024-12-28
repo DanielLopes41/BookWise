@@ -26,6 +26,7 @@ export const Content = styled(Dialog.Content, {
   alignItems: 'center',
 })
 export const ContentContainer = styled('div', {
+  width: 630,
   height: '98%',
   overflowY: 'scroll',
   paddingTop: '$7',
@@ -68,12 +69,15 @@ export const CloseButton = styled(Dialog.Close, {
   top: '15px',
   right: '35px',
   border: 'none',
+  padding: '$2',
+  lineHeight: '0',
   background: 'inherit',
   color: '$gray400',
   fontSize: '24px',
 
   '&:hover': {
-    color: '#0070f3',
+    borderRadius: '4px',
+    backgroundColor: '$gray500',
     cursor: 'pointer',
   },
 })

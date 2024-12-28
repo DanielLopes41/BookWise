@@ -4,6 +4,10 @@ export const CommentContainer = styled('div', {
   borderRadius: '8px',
   margin: 'auto',
   width: '65%',
+  '&:hover': {
+    cursor: 'pointer',
+    outline: '2px solid $gray500',
+  },
 })
 export const CommentContent = styled('div', {
   display: 'flex',
@@ -35,6 +39,8 @@ export const TextContainer = styled('div', {
   display: 'flex',
   flexDirection: 'column',
   gap: '$4',
+  marginRight: 'auto',
+  width: '100%',
   span: {
     h1: {
       fontSize: '$md',
