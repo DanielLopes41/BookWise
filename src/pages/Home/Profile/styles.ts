@@ -88,6 +88,7 @@ export const InfosContainer = styled('div', {
       gap: '$5',
     },
     section: {
+      width: '135px',
       display: 'flex',
       flexDirection: 'column',
     },

@@ -55,7 +55,7 @@ export function WriteComment({ bookId }: setNewCommentProps) {
       await mutation.mutate()
     }
   }
-
+  console.log(starValue)
   return (
     <CommentContainer>
       <CommentContent>

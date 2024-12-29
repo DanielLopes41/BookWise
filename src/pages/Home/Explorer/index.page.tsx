@@ -80,7 +80,7 @@ export default function Explorer() {
   }
 
   const columns = getBookColumns(filteredBooks)
-
+  const session = useSession()
   return (
     <ExplorerMainContainer>
       <Aside />
@@ -94,6 +94,7 @@ export default function Explorer() {
             value={searchBarChange}
             onchange={handleSearchParam}
             onkeydown={handleKeyDown}
+            placeholder="Buscar livro ou autor"
           />
         </Topbar>
         <CategoryNavigation>
@@ -148,6 +149,11 @@ export default function Explorer() {
                       author={book.author}
                       coverUrl={book.cover_url}
                       name={book.name}
+                      IsRead={
+                        book.ratings?.filter(
+                          (rating) => rating.user.id === session.data?.user.id,
+                        ).length > 0
+                      }
                     />
                   </Trigger>
                   <BooksDialog

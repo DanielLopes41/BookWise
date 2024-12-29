@@ -3,7 +3,7 @@ import { styled } from '@stitches/react'
 
 export const ExplorerMainContainer = styled('main', {
   display: 'grid',
-  gridTemplateColumns: '1fr 3fr ',
+  gridTemplateColumns: '1fr 3fr',
   padding: '$4',
   scrollbarWidth: 'none',
   '&::-webkit-scrollbar': {
@@ -16,7 +16,7 @@ export const ExplorerContainer = styled('div', {
 export const Topbar = styled('div', {
   marginTop: '$10',
   display: 'flex',
-  width: '76%',
+  width: '80%',
   justifyContent: 'space-between',
   p: {
     fontFamily: '$default',

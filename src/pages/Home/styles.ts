@@ -1,5 +1,5 @@
 import { styled } from '@stitches/react'
-
+import * as Dialog from '@radix-ui/react-dialog'
 export const HomeContainer = styled('div', {
   display: 'grid',
   gridTemplateColumns: '1fr 3fr 1fr',
@@ -119,30 +119,40 @@ export const BookListContainer = styled('div', {
   },
 })
 export const LastReadingContainer = styled('div', {
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
   p: {
     color: '$gray100',
     fontSize: '$sm',
     alignItems: 'center',
   },
   button: {
-    all: 'unset !important',
-    display: 'flex !important',
-    padding: '$2 $3 !important',
-    borderRadius: '4px !important',
-    '&:hover ': {
-      backgroundColor: 'rgba(117, 114, 228, 0.06) !important',
-      cursor: 'pointer !important',
-    },
-    h1: {
-      fontSize: '$sm',
-      color: '$purple100',
-      display: 'flex',
-      alignItems: 'center',
-      gap: '$2',
-      opacity: 1,
-    },
-  },
-  '> div': {
     marginTop: '$6',
   },
+})
+export const SeeAllButton = styled('button', {
+  all: 'unset !important',
+  display: 'flex !important',
+  padding: '$2 $3 !important',
+  borderRadius: '4px !important',
+  '&:hover ': {
+    backgroundColor: 'rgba(117, 114, 228, 0.06) !important',
+    cursor: 'pointer !important',
+  },
+  h1: {
+    fontSize: '$sm',
+    color: '$purple100',
+    display: 'flex',
+    alignItems: 'center',
+    gap: '$2',
+    opacity: 1,
+  },
+})
+export const Trigger = styled(Dialog.Trigger, {
+  all: 'unset',
+  width: '65%',
+})
+export const BookCardTrigger = styled(Dialog.Trigger, {
+  all: 'unset',
 })

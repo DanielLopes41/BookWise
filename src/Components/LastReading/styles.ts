@@ -2,8 +2,6 @@ import { styled } from '@stitches/react'
 export const CommentContainer = styled('div', {
   backgroundColor: '$gray600',
   borderRadius: '8px',
-  margin: 'auto',
-  width: '65%',
   '&:hover': {
     cursor: 'pointer',
     outline: '2px solid $gray500',
@@ -14,7 +12,6 @@ export const CommentContent = styled('div', {
   flexDirection: 'column',
   gap: '$8',
   padding: '$6',
-  height: '80%',
 })
 export const AvatarContainer = styled('div', {
   display: 'flex',

@@ -19,24 +19,62 @@ import { ptBR } from 'date-fns/locale'
 import Cookies from 'js-cookie'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/router'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
+
 export default function Profile() {
+  const [searchBarChange, setSearchBarChange] = useState('')
+  const [searchParam, setSearchParam] = useState('')
+
   const { data: OwnRatings } = useQuery({
     queryKey: ['OwnRatings'],
     queryFn: async () => {
       const response = await api.get(`/users/ratings/userRatings`)
+      console.log(response.data)
+      return response.data
+    },
+  })
+
+  const { data: Users } = useQuery({
+    queryKey: ['users'],
+    queryFn: async () => {
+      const response = await api.get(`/users`)
       return response.data
     },
   })
 
   const { status } = useSession()
   const router = useRouter()
+
   useEffect(() => {
     const Token = Cookies.get('GuestToken') || false
     if (status === 'unauthenticated' && !Token) {
       router.push('/')
     }
   }, [status, router])
+
+  const session = useSession()
+
+  const handleSearchParam = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchBarChange(e.target.value)
+  }
+
+  const clearSearchBarChange = () => {
+    setSearchBarChange('')
+  }
+
+  const handleKeyDown = (event: React.KeyboardEvent) => {
+    if (event.key === 'Enter') {
+      event.preventDefault()
+      setSearchParam(searchBarChange)
+      clearSearchBarChange()
+    }
+  }
+  const filteredBooks = searchParam
+    ? OwnRatings?.filter((book) =>
+        book.title.toLowerCase().includes(searchParam.toLowerCase()),
+      )
+    : OwnRatings
+
   return (
     <Container>
       <Aside />
@@ -44,13 +82,18 @@ export default function Profile() {
         <p>
           <User size={32} /> Perfil
         </p>
-        <SearchBar />
+        <SearchBar
+          value={searchBarChange}
+          onchange={handleSearchParam}
+          onkeydown={handleKeyDown}
+          placeholder="Buscar livro avaliado"
+        />
         <ReadsContainer>
-          {OwnRatings?.map((OwnRating, index) => {
+          {filteredBooks?.map((OwnRating, index) => {
             return (
               <ReadContainer key={index}>
                 <p>
-                  {formatDistanceToNow(OwnRating.created_at, {
+                  {formatDistanceToNow(new Date(OwnRating.created_at), {
                     addSuffix: true,
                     locale: ptBR,
                   })}
@@ -61,7 +104,6 @@ export default function Profile() {
                   Title={OwnRating.title}
                   content={OwnRating.description}
                   coverUrl={OwnRating.coverUrl}
-                  key={OwnRating.id}
                 />
               </ReadContainer>
             )
@@ -72,45 +114,50 @@ export default function Profile() {
         <InfosContainer>
           <div>
             <Avatar
-              src="https://avatars.githubusercontent.com/u/96553464?v=4"
+              src={session.data?.user.avatar_url}
               alt="Imagem do usuário"
               width={72}
               height={72}
             />
             <span>
-              <h1>Daniel Lopes</h1>
-              <p>membro desde 2019</p>
+              <h1>{session.data?.user.name}</h1>
+              <p>
+                Membro desde{' '}
+                {Users?.user.created_at
+                  ? `${new Date(Users.user.created_at).getFullYear()}`
+                  : 'Desconhecido'}
+              </p>
             </span>
           </div>
           <span>
-            <Bar></Bar>
+            <Bar />
 
             <div>
               <BookOpen size={32} />
               <section>
-                <h1>233</h1>
+                <h1>{Users?.stats?.totalReadPages || 0}</h1>
                 <p>Páginas lidas</p>
               </section>
             </div>
             <div>
               <Books size={32} />
               <section>
-                <h1>10</h1>
-                <p>livros avaliados</p>
+                <h1>{Users?.stats?.totalReadBooks || 0}</h1>
+                <p>Livros avaliados</p>
               </section>
             </div>
             <div>
               <UserList size={32} />
               <section>
-                <h1>8</h1>
-                <p>Páginas lidas</p>
+                <h1>{Users?.stats?.totalReadAuthors || 0}</h1>
+                <p>Autores lidos</p>
               </section>
             </div>
             <div>
               <BookmarkSimple size={32} />
               <section>
-                <h1>233</h1>
-                <p>Páginas lidas</p>
+                <h1>{Users?.stats?.mostFrequentCategory || 'Nenhuma'}</h1>
+                <p>Categoria mais lida</p>
               </section>
             </div>
           </span>

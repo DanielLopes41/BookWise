@@ -57,14 +57,17 @@ export function BooksDialog({
   const [isOpenWriteComment, setOpenWriteComment] = useState(false)
   const averageRate =
     currentBook && currentBook.ratings && currentBook.ratings.length > 0
-      ? currentBook.ratings.reduce((acc, rating) => acc + rating.rate, 0) /
-        currentBook.ratings.length
+      ? Number(
+          (
+            currentBook.ratings.reduce((acc, rating) => acc + rating.rate, 0) /
+            currentBook.ratings.length
+          ).toFixed(1),
+        )
       : 0
 
   if (!currentBook) {
     return <p>Livro não encontrado.</p>
   }
-
   return (
     <Dialog.Portal>
       <Overlay />

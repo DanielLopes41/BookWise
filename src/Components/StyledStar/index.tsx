@@ -7,22 +7,14 @@ interface StarButtonProps {
 }
 
 export function StyledStar({ index, starValue }: StarButtonProps) {
-  const isHalfStar = starValue >= index && starValue < index + 1
-  const isFullStar = starValue >= index + 1
-
-  console.log({
-    index,
-    starValue,
-    isHalfStar,
-    isFullStar,
-  })
-
+  const isFull = starValue >= index + 1
+  const isHalf = starValue >= index + 0.5
   return (
     <StarContainer>
-      {isFullStar ? (
-        <Star size={16} weight={isFullStar ? 'fill' : 'regular'} />
-      ) : isHalfStar ? (
-        <StarHalf size={16} weight={isHalfStar ? 'fill' : 'regular'} />
+      {isFull ? (
+        <Star size={16} weight="fill" />
+      ) : isHalf ? (
+        <StarHalf size={16} weight="fill" />
       ) : (
         <Star size={16} weight="regular" />
       )}

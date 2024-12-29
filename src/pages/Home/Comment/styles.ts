@@ -10,7 +10,6 @@ export const CommentContent = styled('div', {
   flexDirection: 'column',
   gap: '$8',
   padding: '$6',
-  height: '80%',
 })
 export const AvatarContainer = styled('div', {
   display: 'flex',
