@@ -1,30 +1,27 @@
+// src/pages/api/auth/[...nextauth].ts
+import { NextApiRequest, NextApiResponse } from 'next'
 import NextAuth, { NextAuthOptions } from 'next-auth'
-import GithubProvider, { GithubProfile } from 'next-auth/providers/github'
-import GoogleProvider, { GoogleProfile } from 'next-auth/providers/google'
+import GithubProvider from 'next-auth/providers/github'
+import GoogleProvider from 'next-auth/providers/google'
 import { PrismaAdapter } from '@next-auth/prisma-adapter'
 import { prisma } from '@/lib/prisma'
-import { NextApiRequest, NextApiResponse } from 'next'
 
-export function buildNextAuthOptions(
-  req: NextApiRequest,
-  res: NextApiResponse,
-): NextAuthOptions {
+export function buildNextAuthOptions(): NextAuthOptions {
   return {
     adapter: PrismaAdapter(prisma),
-
     providers: [
       GithubProvider({
         clientId: process.env.GITHUB_ID ?? '',
         clientSecret: process.env.GITHUB_SECRET ?? '',
         allowDangerousEmailAccountLinking: true,
-        profile: (profile: GithubProfile) => ({
+
+        profile: (profile) => ({
           id: profile.id.toString(),
           name: profile.name || 'Unknown',
           email: profile.email || 'no-email@example.com',
           avatar_url: profile.avatar_url,
         }),
       }),
-
       GoogleProvider({
         clientId: process.env.GOOGLE_ID ?? '',
         clientSecret: process.env.GOOGLE_SECRET ?? '',
@@ -38,7 +35,7 @@ export function buildNextAuthOptions(
               'https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile',
           },
         },
-        profile: (profile: GoogleProfile) => ({
+        profile: (profile) => ({
           id: profile.sub,
           name: profile.name,
           email: profile.email,
@@ -46,7 +43,6 @@ export function buildNextAuthOptions(
         }),
       }),
     ],
-
     callbacks: {
       async signIn({ user }) {
         if (!user.email) {
@@ -67,5 +63,6 @@ export function buildNextAuthOptions(
   }
 }
 
-export default (req: NextApiRequest, res: NextApiResponse) =>
-  NextAuth(req, res, buildNextAuthOptions(req, res))
+export default (req: NextApiRequest, res: NextApiResponse) => {
+  return NextAuth(req, res, buildNextAuthOptions())
+}

@@ -1,5 +1,4 @@
 import Image from 'next/image'
-import Bookimg from '../../../../../public/images/books/entendendo-algoritmos.jpg'
 import {
   AvatarSection,
   BookInfo,

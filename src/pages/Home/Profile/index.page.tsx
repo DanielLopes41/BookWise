@@ -21,20 +21,44 @@ import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 
-export default function Profile() {
-  const [searchBarChange, setSearchBarChange] = useState('')
-  const [searchParam, setSearchParam] = useState('')
+interface Rating {
+  rate: number
+  title: string
+  author: string
+  description: string
+  coverUrl: string
+  created_at: string
+}
 
-  const { data: OwnRatings } = useQuery({
+interface UserStats {
+  totalReadPages: number
+  totalReadBooks: number
+  totalReadAuthors: number
+  mostFrequentCategory: string
+}
+
+interface UserData {
+  user: {
+    name: string
+    avatar_url: string
+    created_at: string
+  }
+  stats: UserStats
+}
+
+export default function Profile() {
+  const [searchBarChange, setSearchBarChange] = useState<string>('')
+  const [searchParam, setSearchParam] = useState<string>('')
+
+  const { data: OwnRatings } = useQuery<Rating[]>({
     queryKey: ['OwnRatings'],
     queryFn: async () => {
       const response = await api.get(`/users/ratings/userRatings`)
-      console.log(response.data)
       return response.data
     },
   })
 
-  const { data: Users } = useQuery({
+  const { data: Users } = useQuery<UserData>({
     queryKey: ['users'],
     queryFn: async () => {
       const response = await api.get(`/users`)
@@ -69,6 +93,7 @@ export default function Profile() {
       clearSearchBarChange()
     }
   }
+
   const filteredBooks = searchParam
     ? OwnRatings?.filter((book) =>
         book.title.toLowerCase().includes(searchParam.toLowerCase()),
@@ -114,7 +139,7 @@ export default function Profile() {
         <InfosContainer>
           <div>
             <Avatar
-              src={session.data?.user.avatar_url}
+              src={session.data?.user.avatar_url || 'unavailable'}
               alt="Imagem do usuário"
               width={72}
               height={72}

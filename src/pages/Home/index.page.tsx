@@ -22,9 +22,31 @@ import { api } from '../api/axios'
 import * as Dialog from '@radix-ui/react-dialog'
 import Cookies from 'js-cookie'
 import { BooksDialog } from './Explorer/BooksDialog'
+
+interface Rating {
+  id: number
+  author: string
+  avatarUrl: string
+  coverUrl: string
+  description: string
+  name: string
+  created_at: string
+  rate: number
+  title: string
+}
+
+interface Book {
+  id: number
+  author: string
+  cover_url: string
+  name: string
+  ratings: Array<{ rate: number }>
+}
+
 export default function Home() {
   const { status } = useSession()
   const router = useRouter()
+
   useEffect(() => {
     const Token = Cookies.get('GuestToken') || false
     if (status === 'unauthenticated' && !Token) {
@@ -32,44 +54,46 @@ export default function Home() {
     }
   }, [status, router])
 
-  const { data: Ratings } = useQuery({
+  const { data: Ratings = [] } = useQuery<Rating[]>({
     queryKey: ['ratings'],
     queryFn: async () => {
       const response = await api.get(`/users/ratings`)
       return response.data
     },
   })
-  const { data: OwnRatings } = useQuery({
+
+  const { data: OwnRatings = [] } = useQuery<Rating[]>({
     queryKey: ['OwnRatings'],
     queryFn: async () => {
       const response = await api.get(`/users/ratings/userRatings`)
       return response.data
     },
   })
-  const { data: Books = [] } = useQuery({
+
+  const { data: Books = [] } = useQuery<Book[]>({
     queryKey: ['books'],
     queryFn: async () => {
       const response = await api.get(`/books`)
-      console.log(response.data)
       return response.data
     },
   })
-  const lastRating = OwnRatings?.[0]
-  const popularBooks = [...Books]
-    .map((book) => {
-      const averageRate =
-        book.ratings && book.ratings.length > 0
-          ? book.ratings.reduce((acc, rating) => acc + rating.rate, 0) /
-            book.ratings.length
-          : 0
 
-      return {
-        ...book,
-        averageRate,
-      }
-    })
+  const lastRating = OwnRatings?.[0]
+  const popularBooks = Books.map((book) => {
+    const averageRate =
+      book.ratings && book.ratings.length > 0
+        ? book.ratings.reduce((acc, rating) => acc + rating.rate, 0) /
+          book.ratings.length
+        : 0
+
+    return {
+      ...book,
+      averageRate,
+    }
+  })
     .sort((a, b) => b.averageRate - a.averageRate)
     .slice(0, 4)
+
   return (
     <HomeContainer>
       <Aside />
@@ -100,15 +124,13 @@ export default function Home() {
                   content={lastRating.description}
                   coverUrl={lastRating.coverUrl}
                   createdAt={lastRating.created_at}
-                  key={lastRating.id}
                 />
               </Trigger>
               <BooksDialog
                 author={lastRating.author}
                 coverUrl={lastRating.coverUrl}
                 name={lastRating.title}
-                category={lastRating.categories}
-                bookId={lastRating.book_id}
+                bookId={lastRating.id}
               />
             </Dialog.Root>
           </LastReadingContainer>
@@ -117,8 +139,9 @@ export default function Home() {
           <span>
             <p>Avaliações mais recentes</p>
           </span>
-          {Ratings?.map((rating, index) => (
+          {Ratings.map((rating, index) => (
             <Comment
+              key={index}
               author={rating.author}
               avatarUrl={rating.avatarUrl}
               coverUrl={rating.coverUrl}
@@ -127,7 +150,6 @@ export default function Home() {
               createdAt={rating.created_at}
               rate={rating.rate}
               title={rating.title}
-              key={index}
             />
           ))}
         </CommentList>
@@ -145,33 +167,24 @@ export default function Home() {
             </h1>
           </button>
         </span>
-        {popularBooks.map((book, index) => {
-          const averageRate =
-            book.ratings && book.ratings.length > 0
-              ? book.ratings.reduce((acc, rating) => acc + rating.rate, 0) /
-                book.ratings.length
-              : 0
-          return (
-            <Dialog.Root key={index}>
-              <BookCardTrigger>
-                <HomeBookCard
-                  Author={book.author}
-                  coverUrl={book.cover_url}
-                  Rate={averageRate}
-                  Title={book.name}
-                  key={book.id}
-                />
-              </BookCardTrigger>
-              <BooksDialog
-                author={book.author}
+        {popularBooks.map((book) => (
+          <Dialog.Root key={book.id}>
+            <BookCardTrigger>
+              <HomeBookCard
+                Author={book.author}
                 coverUrl={book.cover_url}
-                name={book.name}
-                category={book.categories}
-                bookId={book.id}
+                Rate={book.averageRate}
+                Title={book.name}
               />
-            </Dialog.Root>
-          )
-        })}
+            </BookCardTrigger>
+            <BooksDialog
+              author={book.author}
+              coverUrl={book.cover_url}
+              name={book.name}
+              bookId={book.id}
+            />
+          </Dialog.Root>
+        ))}
       </BookListContainer>
     </HomeContainer>
   )

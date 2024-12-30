@@ -1,6 +1,6 @@
 import { styled } from '@stitches/react'
 
-export const HomeBookCardContainer = styled('div', {
+export const BookCardWrapper = styled('div', {
   backgroundColor: '$gray700',
   position: 'relative',
   padding: '$4 $5',
@@ -11,7 +11,7 @@ export const HomeBookCardContainer = styled('div', {
   },
 })
 
-export const HomeBookCardContent = styled('div', {
+export const BookCardContent = styled('div', {
   display: 'flex',
   width: '20rem',
   gap: '$6',
@@ -21,21 +21,9 @@ export const HomeBookCardContent = styled('div', {
     flexDirection: 'column',
     justifyContent: 'space-between',
   },
-  div: {
-    span: {
-      section: {
-        marginRight: '-8px',
-      },
-      nav: {
-        marginLeft: '-9px',
-      },
-    },
-  },
-  image: {
-    width: 108,
-  },
 })
-export const TextContainer = styled('div', {
+
+export const BookInfo = styled('div', {
   display: 'flex',
   flexDirection: 'column',
   width: '100%',

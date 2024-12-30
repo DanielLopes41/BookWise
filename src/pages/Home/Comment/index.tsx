@@ -6,7 +6,6 @@ import {
   TextContainer,
   TextSection,
 } from './styles'
-import Bookimg from '../../../../public/images/books/codigo-limpo.jpg'
 import { Avatar } from '@/Components/Avatar'
 import { StarCollection } from '@/Components/StarCollection'
 import { formatDistanceToNow } from 'date-fns'

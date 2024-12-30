@@ -19,7 +19,6 @@ import Cookies from 'js-cookie'
 export default function Home() {
   const Router = useRouter()
   const { data: session } = useSession()
-  console.log(session)
   useEffect(() => {
     if (session) {
       Router.push('/Home')

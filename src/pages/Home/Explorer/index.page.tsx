@@ -20,19 +20,37 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import Cookies from 'js-cookie'
 import { useSession } from 'next-auth/react'
+
+interface Rating {
+  user: {
+    id: number
+  }
+}
+
+interface Book {
+  id: number
+  author: string
+  cover_url: string
+  name: string
+  categories: string[]
+  ratings: Rating[]
+}
+
 export default function Explorer() {
-  const [currentCategory, setCurrentCategory] = useState('Tudo')
-  const [searchBarChange, setSearchBarChange] = useState('')
-  const [searchParam, setSearchParam] = useState('')
-  const { status } = useSession()
+  const [currentCategory, setCurrentCategory] = useState<string>('Tudo')
+  const [searchBarChange, setSearchBarChange] = useState<string>('')
+  const [searchParam, setSearchParam] = useState<string>('')
+  const { status, data: sessionData } = useSession()
   const router = useRouter()
+
   useEffect(() => {
     const Token = Cookies.get('GuestToken') || false
     if (status === 'unauthenticated' && !Token) {
       router.push('/')
     }
   }, [status, router])
-  const { data: Books = [] } = useQuery({
+
+  const { data: Books = [] } = useQuery<Book[]>({
     queryKey: ['books', currentCategory],
     queryFn: async () => {
       const response = await api.get('/books', {
@@ -43,6 +61,7 @@ export default function Explorer() {
       return response.data
     },
   })
+
   const handleCategoryClick = (category: string) => {
     setCurrentCategory(category)
   }
@@ -55,7 +74,7 @@ export default function Explorer() {
     setSearchBarChange('')
   }
 
-  const handleKeyDown = (event: React.KeyboardEvent) => {
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
       event.preventDefault()
       setSearchParam(searchBarChange)
@@ -71,8 +90,8 @@ export default function Explorer() {
       )
     : Books
 
-  const getBookColumns = (books: any[]) => {
-    const columns = []
+  const getBookColumns = (books: Book[]): Book[][] => {
+    const columns: Book[][] = []
     for (let i = 0; i < books.length; i += 5) {
       columns.push(books.slice(i, i + 5))
     }
@@ -80,7 +99,7 @@ export default function Explorer() {
   }
 
   const columns = getBookColumns(filteredBooks)
-  const session = useSession()
+
   return (
     <ExplorerMainContainer>
       <Aside />
@@ -142,25 +161,23 @@ export default function Explorer() {
         <BookList>
           {columns.map((column, colIndex) => (
             <BookCol key={colIndex}>
-              {column.map((book, bookIndex) => (
-                <Dialog.Root key={bookIndex}>
+              {column.map((book) => (
+                <Dialog.Root key={book.id}>
                   <Trigger>
                     <BookCard
                       author={book.author}
                       coverUrl={book.cover_url}
                       name={book.name}
-                      IsRead={
-                        book.ratings?.filter(
-                          (rating) => rating.user.id === session.data?.user.id,
-                        ).length > 0
-                      }
+                      IsRead={book.ratings?.some(
+                        (rating) =>
+                          rating.user.id === Number(sessionData?.user.id),
+                      )}
                     />
                   </Trigger>
                   <BooksDialog
                     author={book.author}
                     coverUrl={book.cover_url}
                     name={book.name}
-                    category={book.categories}
                     bookId={book.id}
                   />
                 </Dialog.Root>

@@ -34,13 +34,6 @@ export const { styled, getCssText, globalCss, theme } = createStitches({
       bold: '700',
     },
 
-    lineHeights: {
-      shorter: '125%',
-      short: '140%',
-      base: '160%',
-      tall: '180%',
-    },
-
     colors: {
       white: '#FFFFFF',
       black: '#000000',

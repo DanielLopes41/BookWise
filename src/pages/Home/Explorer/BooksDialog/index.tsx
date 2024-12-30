@@ -1,4 +1,9 @@
 import * as Dialog from '@radix-ui/react-dialog'
+import { X } from 'phosphor-react'
+import { useState } from 'react'
+import { useQuery } from '@tanstack/react-query'
+import { useSession } from 'next-auth/react'
+import { api } from '@/pages/api/axios'
 import {
   CloseButton,
   CommentList,
@@ -7,29 +12,38 @@ import {
   ModalContent,
   Overlay,
 } from './styles'
-
-import { X } from 'phosphor-react'
 import { DetailedBook } from './DetailedBook'
 import { CommentCard } from './CommentCard'
 import AuthDialog from '../AuthDialog'
 import { WriteComment } from './WriteComment'
 import { NewCommentCard } from './NewCommentCard'
-import { useState, useEffect } from 'react'
-import { useQuery } from '@tanstack/react-query'
-import { api } from '@/pages/api/axios'
-import { Comment } from '../../Comment'
-import { useSession } from 'next-auth/react'
 
-interface Comment {
-  TextAreaContent: string
-  starValue: number
+interface Rating {
+  user: {
+    id: string
+    userName: string
+  }
+  description: string
+  rate: number
+  avatarUrl: string
+  created_at: string
 }
 
-export interface BooksDialogProps {
+interface Book {
   name: string
   author: string
   coverUrl: string
   bookId: string
+  total_pages: number
+  categories: string[]
+  ratings: Rating[]
+}
+
+interface BooksDialogProps {
+  name: string
+  author: string
+  coverUrl: string
+  bookId: number
 }
 
 export function BooksDialog({
@@ -38,25 +52,32 @@ export function BooksDialog({
   name,
   bookId,
 }: BooksDialogProps) {
-  const { data: Books = [] } = useQuery({
+  const { data: books = [] } = useQuery<Book[]>({
     queryKey: ['books'],
     queryFn: async () => {
-      const response = await api.get(`/books`)
+      const response = await api.get('/books')
       return response.data
     },
   })
+  const [isOpenWriteComment, setOpenWriteComment] = useState(false)
   const { status } = useSession()
   const session = useSession()
-  const currentBook = Books.find((book) => book.name === name)
-  const OwnComments = currentBook?.ratings
-    ?.filter((rating) => rating.user.id === session.data?.user.id)
+  const currentBook = books.find((book) => book.name === name)
+
+  if (!currentBook) {
+    return <p>Livro não encontrado.</p>
+  }
+
+  const OwnComments = currentBook.ratings
+    .filter((rating) => rating.user.id === session.data?.user.id)
     .reverse()
-  const CommentsWithoutOwn = currentBook?.ratings
-    ?.filter((rating) => rating.user.id !== session.data?.user.id)
+
+  const CommentsWithoutOwn = currentBook.ratings
+    .filter((rating) => rating.user.id !== session.data?.user.id)
     .reverse()
-  const [isOpenWriteComment, setOpenWriteComment] = useState(false)
+
   const averageRate =
-    currentBook && currentBook.ratings && currentBook.ratings.length > 0
+    currentBook.ratings.length > 0
       ? Number(
           (
             currentBook.ratings.reduce((acc, rating) => acc + rating.rate, 0) /
@@ -65,9 +86,6 @@ export function BooksDialog({
         )
       : 0
 
-  if (!currentBook) {
-    return <p>Livro não encontrado.</p>
-  }
   return (
     <Dialog.Portal>
       <Overlay />
@@ -110,20 +128,20 @@ export function BooksDialog({
             {isOpenWriteComment ? <WriteComment bookId={bookId} /> : null}
             {OwnComments.map((comment, index) => (
               <NewCommentCard
-                createdAt={comment.created_at}
                 key={index}
+                createdAt={comment.created_at}
                 content={comment.description}
                 NumberOfStarChecked={comment.rate}
               />
             ))}
             {CommentsWithoutOwn.map((rating, index) => (
               <CommentCard
+                key={index}
                 avatarUrl={rating.avatarUrl}
                 content={rating.description || ''}
                 createdAt={rating.created_at}
                 rate={rating.rate}
-                userName={rating.userName}
-                key={index}
+                userName={rating.user.userName}
               />
             ))}
           </CommentList>

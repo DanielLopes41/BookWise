@@ -1,11 +1,13 @@
 import { MagnifyingGlass } from 'phosphor-react'
 import { SearchBarC, SearchBarContainer } from './styles'
+
 export interface SearchBarProps {
-  onchange: () => void
-  onkeydown: () => void
+  onchange: (e: React.ChangeEvent<HTMLInputElement>) => void
+  onkeydown: (e: React.KeyboardEvent<HTMLInputElement>) => void
   value: string
   placeholder: string
 }
+
 export function SearchBar({
   onchange,
   onkeydown,

@@ -5,6 +5,20 @@ import { ReadMarker } from './ReadMarker'
 import { useQuery } from '@tanstack/react-query'
 import { api } from '@/pages/api/axios'
 
+interface Rating {
+  rate: number
+  user: {
+    id: number
+  }
+}
+
+interface Book {
+  name: string
+  author: string
+  cover_url: string
+  ratings: Rating[]
+}
+
 export interface BookCardProps {
   IsRead?: boolean
   name: string
@@ -13,7 +27,7 @@ export interface BookCardProps {
 }
 
 export function BookCard({ IsRead, name, author, coverUrl }: BookCardProps) {
-  const { data: Books = [] } = useQuery({
+  const { data: Books = [] } = useQuery<Book[]>({
     queryKey: ['books'],
     queryFn: async () => {
       const response = await api.get(`/books`)
@@ -22,10 +36,13 @@ export function BookCard({ IsRead, name, author, coverUrl }: BookCardProps) {
   })
 
   const currentBook = Books.find((book) => book.name === name)
+
   const averageRate =
     currentBook && currentBook.ratings.length > 0
-      ? currentBook.ratings.reduce((acc, rating) => acc + rating.rate, 0) /
-        currentBook.ratings.length
+      ? currentBook.ratings.reduce(
+          (acc: number, rating: Rating) => acc + rating.rate,
+          0,
+        ) / currentBook.ratings.length
       : 0
 
   return (

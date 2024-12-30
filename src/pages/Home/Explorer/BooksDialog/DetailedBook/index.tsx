@@ -1,5 +1,4 @@
 import Image from 'next/image'
-import Bookimg from '../../../../../../public/images/books/14-habitos-de-desenvolvedores-altamente-produtivos.jpg'
 
 import {
   AvatarSection,
@@ -7,12 +6,10 @@ import {
   Container,
   Content,
   Details,
-  Rating,
   TextSection,
 } from './styles'
 import { BookmarkSimple, BookOpen } from 'phosphor-react'
 import { StarCollection } from '@/Components/StarCollection'
-import { pages } from 'next/dist/build/templates/app-page'
 export interface DetailedBookProps {
   name: string
   author: string
@@ -20,7 +17,7 @@ export interface DetailedBookProps {
   rate: number
   ratings: number
   pages: number
-  category: [string]
+  category: string[]
 }
 export function DetailedBook({
   name,

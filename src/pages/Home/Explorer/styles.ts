@@ -7,7 +7,8 @@ export const ExplorerMainContainer = styled('main', {
   padding: '$4',
   scrollbarWidth: 'none',
   '&::-webkit-scrollbar': {
-    display: 'none',
+    width: '0px',
+    background: 'transparent',
   },
 })
 export const ExplorerContainer = styled('div', {

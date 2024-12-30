@@ -7,7 +7,6 @@ import {
 } from './styles'
 import { formatDistance } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
-import { StyledStar } from '@/Components/StyledStar'
 import { Avatar } from '@/Components/Avatar'
 import { StarCollection } from '@/Components/StarCollection'
 export interface CommentCardProps {

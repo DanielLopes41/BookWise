@@ -13,17 +13,16 @@ import { StarButton } from '@/Components/StarButton'
 import { Avatar } from '@/Components/Avatar'
 import { useState } from 'react'
 import { api } from '@/pages/api/axios'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useMutation } from '@tanstack/react-query'
 import { useSession } from 'next-auth/react'
 export interface setNewCommentProps {
-  bookId: string
+  bookId: number
 }
 
 export function WriteComment({ bookId }: setNewCommentProps) {
   const [TextAreaContent, setTextAreaContent] = useState<string>('')
   const [starValue, setStarValue] = useState<number>(1)
   const session = useSession()
-  const queryClient = useQueryClient()
   function handleTextAreaChange(e: React.ChangeEvent<HTMLTextAreaElement>) {
     setTextAreaContent(e.target.value)
   }
@@ -43,7 +42,6 @@ export function WriteComment({ bookId }: setNewCommentProps) {
       return response.data
     },
     onSuccess: () => {
-      queryClient.invalidateQueries(['ratings'])
       handleClearTextArea()
     },
   })
@@ -55,12 +53,15 @@ export function WriteComment({ bookId }: setNewCommentProps) {
       await mutation.mutate()
     }
   }
-  console.log(starValue)
   return (
     <CommentContainer>
       <CommentContent>
         <AvatarContainer>
-          <Avatar src={session.data?.user.avatar_url} width={40} height={40} />
+          <Avatar
+            src={session.data?.user.avatar_url || 'unavailable'}
+            width={40}
+            height={40}
+          />
           <div>
             <h1>{session.data?.user.name}</h1>
           </div>

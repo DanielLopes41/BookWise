@@ -1,26 +1,18 @@
 import { StarCollection } from '@/Components/StarCollection'
-import {
-  TextContainer,
-  HomeBookCardContainer,
-  HomeBookCardContent,
-} from './styles'
+import { BookCardWrapper, BookCardContent, BookInfo } from './styles'
 import Image from 'next/image'
-export interface HomeBookCardProps {
+
+export interface BookCardProps {
   Title: string
   Author: string
   Rate: number
   coverUrl: string
 }
-export function HomeBookCard({
-  coverUrl,
-  Title,
-  Author,
-  Rate,
-}: HomeBookCardProps) {
-  console.log(coverUrl)
+
+export function HomeBookCard({ coverUrl, Title, Author, Rate }: BookCardProps) {
   return (
-    <HomeBookCardContainer>
-      <HomeBookCardContent>
+    <BookCardWrapper>
+      <BookCardContent>
         <Image
           src={`${coverUrl.replace('public', '')}`}
           width={64}
@@ -28,13 +20,13 @@ export function HomeBookCard({
           alt="Capa do livro"
         />
         <div>
-          <TextContainer>
+          <BookInfo>
             <h1>{Title}</h1>
             <p>{Author}</p>
-          </TextContainer>
+          </BookInfo>
           <StarCollection NumberOfStarChecked={Rate} />
         </div>
-      </HomeBookCardContent>
-    </HomeBookCardContainer>
+      </BookCardContent>
+    </BookCardWrapper>
   )
 }

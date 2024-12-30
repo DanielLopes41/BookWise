@@ -19,13 +19,14 @@ export default function Aside() {
   const [Token, setToken] = useState(false)
 
   useEffect(() => {
-    setToken(Cookies.get('GuestToken'))
+    const tokenFromCookies = Cookies.get('GuestToken')
+    setToken(!!tokenFromCookies)
+
     if (status === 'authenticated') {
       Cookies.remove('GuestToken')
-      setToken(Cookies.get('GuestToken'))
+      setToken(false)
     }
   }, [status])
-
   return (
     <AsideContainer>
       <section>

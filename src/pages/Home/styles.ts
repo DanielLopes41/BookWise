@@ -4,6 +4,7 @@ export const HomeContainer = styled('div', {
   display: 'grid',
   gridTemplateColumns: '1fr 3fr 1fr',
   padding: '$4',
+  'overflow-y': 'hidden',
 })
 
 export const CommentListContainer = styled('div', {

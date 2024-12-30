@@ -26,7 +26,7 @@ export function NewCommentCard({
       <CommentContent>
         <AvatarContainer>
           <Avatar
-            src={session.data?.user.avatar_url}
+            src={session.data?.user.avatar_url || 'unavailable'}
             alt="Imagem do usuário"
             width={40}
             height={40}
