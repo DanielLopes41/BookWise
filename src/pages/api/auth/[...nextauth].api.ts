@@ -43,6 +43,7 @@ export function buildNextAuthOptions(): NextAuthOptions {
         }),
       }),
     ],
+    secret: 'Uw9xtzRxWLFd43BKzUDsSq6GwvQi0q20',
     callbacks: {
       async signIn({ user }) {
         if (!user.email) {
