@@ -23,7 +23,7 @@ import { useSession } from 'next-auth/react'
 
 interface Rating {
   user: {
-    id: number
+    id: string
   }
 }
 
@@ -169,8 +169,7 @@ export default function Explorer() {
                       coverUrl={book.cover_url}
                       name={book.name}
                       IsRead={book.ratings?.some(
-                        (rating) =>
-                          rating.user.id === Number(sessionData?.user.id),
+                        (rating) => rating.user.id === sessionData?.user.id,
                       )}
                     />
                   </Trigger>
