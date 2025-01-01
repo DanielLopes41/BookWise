@@ -33,7 +33,7 @@ export const Topbar = styled('div', {
   },
   div: {
     input: {
-      marginRight: '-17px',
+      marginRight: '-20px',
       width: '433px',
       marginLeft: 'auto',
     },
