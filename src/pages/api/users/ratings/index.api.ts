@@ -8,29 +8,28 @@ export default async function handler(
   res: NextApiResponse,
 ) {
   const session = await getServerSession(req, res, buildNextAuthOptions())
-  const sessionUserId = session?.user.id
   if (req.method === 'GET') {
     try {
-      const ratings = await prisma.rating.findMany()
+      const ratings = await prisma.rating.findMany({
+        orderBy: { created_at: 'desc' },
+      })
       const users = await prisma.user.findMany()
       const books = await prisma.book.findMany()
 
-      const completeRatings = ratings
-        .map((rating) => {
-          const user = users.find((user) => user.id === rating.user_id)
-          const book = books.find((book) => book.id === rating.book_id)
+      const completeRatings = ratings.map((rating) => {
+        const user = users.find((user) => user.id === rating.user_id)
+        const book = books.find((book) => book.id === rating.book_id)
 
-          return {
-            ...rating,
-            id: user?.id,
-            name: user?.name,
-            avatarUrl: user?.avatar_url,
-            author: book?.author,
-            coverUrl: book?.cover_url,
-            title: book?.name,
-          }
-        })
-        .filter((rating) => rating !== null && rating.user_id !== sessionUserId)
+        return {
+          ...rating,
+          id: user?.id,
+          name: user?.name,
+          avatarUrl: user?.avatar_url,
+          author: book?.author,
+          coverUrl: book?.cover_url,
+          title: book?.name,
+        }
+      })
       return res.status(200).json(completeRatings)
     } catch (error) {
       console.error('Error fetching ratings:', error)

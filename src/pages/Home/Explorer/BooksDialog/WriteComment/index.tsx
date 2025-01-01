@@ -15,6 +15,7 @@ import { useState } from 'react'
 import { api } from '@/pages/api/axios'
 import { useMutation } from '@tanstack/react-query'
 import { useSession } from 'next-auth/react'
+import { queryClient } from '@/lib/react-query'
 export interface setNewCommentProps {
   bookId: number
 }
@@ -43,6 +44,8 @@ export function WriteComment({ bookId }: setNewCommentProps) {
     },
     onSuccess: () => {
       handleClearTextArea()
+      queryClient.invalidateQueries(['ratings'])
+      queryClient.invalidateQueries(['books'])
     },
   })
   function handleStarSelect(newValue: number) {
