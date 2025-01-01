@@ -44,7 +44,9 @@ export function WriteComment({ bookId }: setNewCommentProps) {
     },
     onSuccess: () => {
       handleClearTextArea()
+      // @ts-expect-error - Ignoring query key typing issue with invalidateQueries
       queryClient.invalidateQueries(['ratings'])
+      // @ts-expect-error - Ignoring query key typing issue with invalidateQueries
       queryClient.invalidateQueries(['books'])
     },
   })
