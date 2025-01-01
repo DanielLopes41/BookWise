@@ -45,7 +45,7 @@ export const AuthButtonContainer = styled('div', {
   flexDirection: 'column',
   justifyContent: 'space-between',
   gap: '$5',
-  width: '60%',
+  minWidth: '250px',
 })
 export const AuthButton = styled('button', {
   all: 'unset',

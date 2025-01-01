@@ -9,9 +9,12 @@ export const MainContainer = styled('div', {
   display: 'flex',
   flexDirection: 'column',
   marginTop: '$10',
-  input: {
-    marginTop: '$8',
-    width: '65%',
+
+  '> div': {
+    input: {
+      width: '65%',
+      marginTop: '$8',
+    },
   },
   '> p:first-child': {
     display: 'flex',

@@ -5,7 +5,6 @@ export const SearchBarC = styled('input', {
   gap: '0.5rem',
   backgroundColor: '$gray800',
   border: 'solid 1px $gray500',
-  width: 433,
   height: 48,
   color: '$gray200',
   fontSize: '$sm',
@@ -20,8 +19,9 @@ export const SearchBarC = styled('input', {
 export const SearchBarContainer = styled('div', {
   svg: {
     position: 'relative',
+
     color: '$gray500',
-    top: 5,
+    top: 6,
     right: 40,
   },
   '&:focus-within svg': {

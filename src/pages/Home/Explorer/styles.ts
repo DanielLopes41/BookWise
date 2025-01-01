@@ -3,7 +3,7 @@ import { styled } from '@stitches/react'
 
 export const ExplorerMainContainer = styled('main', {
   display: 'grid',
-  gridTemplateColumns: '1fr 3fr',
+  gridTemplateColumns: '1fr 2fr',
   padding: '$4',
   scrollbarWidth: 'none',
   '&::-webkit-scrollbar': {
@@ -13,11 +13,13 @@ export const ExplorerMainContainer = styled('main', {
 })
 export const ExplorerContainer = styled('div', {
   marginTop: '$4',
+  display: 'flex',
+  flexDirection: 'column',
+  marginRight: '20rem',
 })
 export const Topbar = styled('div', {
   marginTop: '$10',
   display: 'flex',
-  width: '80%',
   justifyContent: 'space-between',
   p: {
     fontFamily: '$default',
@@ -29,8 +31,12 @@ export const Topbar = styled('div', {
       color: '$green100',
     },
   },
-  '@media (max-width: 1400px)': {
-    width: '100%',
+  div: {
+    input: {
+      marginRight: '-17px',
+      width: '433px',
+      marginLeft: 'auto',
+    },
   },
 })
 export const Trigger = styled(Dialog.Trigger, {
@@ -39,13 +45,13 @@ export const Trigger = styled(Dialog.Trigger, {
 export const CategoryNavigation = styled('nav', {
   display: 'flex',
   gap: '$4',
-  marginTop: '$6',
+  marginTop: '$10',
 })
 export const BookList = styled('div', {
   marginTop: '$10',
   display: 'grid',
   gap: '$5',
-  gridTemplateColumns: '1fr 1fr 1fr 1fr',
+  gridTemplateColumns: '1fr 1fr 1fr',
 })
 export const BookCol = styled('div', {
   display: 'flex',
