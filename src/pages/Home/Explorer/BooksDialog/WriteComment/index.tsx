@@ -23,9 +23,7 @@ export interface setNewCommentProps {
 }
 
 export function WriteComment({ bookId }: setNewCommentProps) {
-  const [postValue, setPostValue] = useState<number>(
-    Number(Cookies.get('PostLimit')) || 0,
-  )
+  const [postValue, setPostValue] = useState<number>(0)
   const [TextAreaContent, setTextAreaContent] = useState<string>('')
 
   useEffect(() => {
@@ -61,8 +59,9 @@ export function WriteComment({ bookId }: setNewCommentProps) {
     },
     onSuccess: () => {
       handleClearTextArea()
-      setPostValue((state) => state - 1)
+      setPostValue(Number(Cookies.get('PostLimit')))
       Cookies.remove('PostLimit')
+      setPostValue((state) => state - 1)
       Cookies.set('PostLimit', `${String(postValue)}`, { expires: 1 / 24 })
       // @ts-expect-error - Ignoring query key typing issue with invalidateQueries
       queryClient.invalidateQueries(['ratings'])
