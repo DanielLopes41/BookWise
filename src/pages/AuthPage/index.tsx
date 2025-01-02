@@ -16,20 +16,26 @@ import { useRouter } from 'next/router'
 import { signIn, signOut, useSession } from 'next-auth/react'
 import { useEffect } from 'react'
 import Cookies from 'js-cookie'
+
 export default function Home() {
+  const IfPostLimitCookieExists = !!Cookies.get('PostLimit')
   const Router = useRouter()
   const { data: session } = useSession()
+
   useEffect(() => {
     if (session) {
       Router.push('/Home')
     }
   }, [session, Router])
+
   async function HandleAuthClick() {
-    await Cookies.set('GuestToken', 'Guest', { expires: 7, secure: true })
+    await Cookies.set('GuestToken', 'Guest', { expires: 1 / 24, secure: true })
     await Router.push(`/Home`)
     signOut()
   }
+
   const hasAuthError = !!Router.query.error
+
   return (
     <AuthPageContainer>
       <MainContainer>
@@ -43,30 +49,66 @@ export default function Home() {
           </TextContainer>
           <AuthButtonContainer>
             <AuthButton
-              onClick={() => signIn('google', { callbackUrl: '/Home' })}
+              onClick={async () => {
+                try {
+                  if (!IfPostLimitCookieExists) {
+                    await signIn('google', { callbackUrl: '/Home' })
+                    Cookies.set('PostLimit', '20', {
+                      expires: 1 / 24,
+                      secure: true,
+                    })
+                  }
+                  await signIn('google', { callbackUrl: '/Home' })
+                } catch (error) {
+                  console.error('Erro durante o login com Google:', error)
+                }
+              }}
             >
               <Image src={GoogleImg} alt="Google Logo" quality={100} /> Entrar
               com Google
             </AuthButton>
+
             <AuthButton
-              onClick={() => signIn('github', { callbackUrl: '/Home' })}
-            >
-              <Image src={GithubImg} alt="Github Logo" quality={100} />
-              Entrar com GitHub
-            </AuthButton>
-            <AuthButton
-              onClick={() => {
-                HandleAuthClick()
+              onClick={async () => {
+                try {
+                  if (!IfPostLimitCookieExists) {
+                    await signIn('github', { callbackUrl: '/Home' })
+                    Cookies.set('PostLimit', '20', {
+                      expires: 1 / 24,
+                      secure: true,
+                    })
+                  }
+                  await signIn('github', { callbackUrl: '/Home' })
+                } catch (error) {
+                  console.error('Erro durante o login com GitHub:', error)
+                }
               }}
             >
-              <Image src={GuestImg} alt="Rocket Image" quality={100} />
-              Acessar como visitante
+              <Image src={GithubImg} alt="Github Logo" quality={100} /> Entrar
+              com GitHub
             </AuthButton>
-            {hasAuthError ? (
-              <AuthError>
-                Ocorreu um erro na autenticação tente novamente
-              </AuthError>
-            ) : null}
+
+            <AuthButton
+              onClick={async () => {
+                try {
+                  await HandleAuthClick()
+                  Cookies.set('PostLimit', '20', {
+                    expires: 1 / 24,
+                    secure: true,
+                  })
+                } catch (error) {
+                  console.error('Erro durante o acesso como visitante:', error)
+                }
+              }}
+            >
+              {hasAuthError ? (
+                <AuthError>
+                  Ocorreu um erro na autenticação, tente novamente.
+                </AuthError>
+              ) : null}
+              <Image src={GuestImg} alt="Rocket Image" quality={100} /> Acessar
+              como visitante
+            </AuthButton>
           </AuthButtonContainer>
         </AuthContainer>
       </MainContainer>

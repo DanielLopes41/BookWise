@@ -11,25 +11,42 @@ import { Check, X } from 'phosphor-react'
 import Rate from 'antd/lib/rate'
 import { StarButton } from '@/Components/StarButton'
 import { Avatar } from '@/Components/Avatar'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { api } from '@/pages/api/axios'
 import { useMutation } from '@tanstack/react-query'
 import { useSession } from 'next-auth/react'
 import { queryClient } from '@/lib/react-query'
+import Cookies from 'js-cookie'
+
 export interface setNewCommentProps {
   bookId: number
 }
 
 export function WriteComment({ bookId }: setNewCommentProps) {
+  const [postValue, setPostValue] = useState<number>(
+    Number(Cookies.get('PostLimit')) || 0,
+  )
   const [TextAreaContent, setTextAreaContent] = useState<string>('')
+
+  useEffect(() => {
+    if (postValue === 0) {
+      setTextAreaContent(
+        'Você não pode fazer mais posts durante 1 hora, faça login novamente quando o tempo terminar',
+      )
+    }
+  }, [postValue])
+
   const [starValue, setStarValue] = useState<number>(1)
   const session = useSession()
+
   function handleTextAreaChange(e: React.ChangeEvent<HTMLTextAreaElement>) {
     setTextAreaContent(e.target.value)
   }
+
   function handleClearTextArea() {
     setTextAreaContent('')
   }
+
   const mutation = useMutation({
     mutationFn: async () => {
       const payload = {
@@ -44,20 +61,34 @@ export function WriteComment({ bookId }: setNewCommentProps) {
     },
     onSuccess: () => {
       handleClearTextArea()
+      setPostValue((state) => state - 1)
+      Cookies.remove('PostLimit')
+      Cookies.set('PostLimit', `${String(postValue)}`, { expires: 1 / 24 })
       // @ts-expect-error - Ignoring query key typing issue with invalidateQueries
       queryClient.invalidateQueries(['ratings'])
       // @ts-expect-error - Ignoring query key typing issue with invalidateQueries
       queryClient.invalidateQueries(['books'])
     },
   })
+
   function handleStarSelect(newValue: number) {
     setStarValue(newValue)
   }
+
   async function handleSetNewComment() {
     if (TextAreaContent !== '') {
       await mutation.mutate()
     }
   }
+
+  useEffect(() => {
+    const cookieExists = !!Cookies.get('PostLimit')
+
+    if (!cookieExists) {
+      setPostValue(0)
+    }
+  }, [])
+
   return (
     <CommentContainer>
       <CommentContent>
@@ -97,7 +128,13 @@ export function WriteComment({ bookId }: setNewCommentProps) {
             </div>
 
             <span>
-              <button onClick={handleSetNewComment}>
+              <button
+                onClick={() => {
+                  if (postValue > 0) {
+                    handleSetNewComment()
+                  }
+                }}
+              >
                 <Check size={24} color="#50B2C0" />
               </button>
               <button onClick={handleClearTextArea}>
