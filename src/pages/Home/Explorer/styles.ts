@@ -49,6 +49,7 @@ export const Trigger = styled(Dialog.Trigger, {
 export const CategoryNavigation = styled('nav', {
   display: 'flex',
   gap: '$4',
+  height: '40px !important',
   marginTop: '$10',
 })
 export const BookList = styled('div', {

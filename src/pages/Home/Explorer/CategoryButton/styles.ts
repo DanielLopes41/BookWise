@@ -11,6 +11,7 @@ export const Button = styled('button', {
         backgroundColor: '$purple200',
         color: '$gray100',
         border: '1px solid $gray800',
+        whiteSpace: 'nowrap',
         '&:hover': {
           cursor: 'pointer',
           border: '1px solid $purple100',
@@ -18,6 +19,7 @@ export const Button = styled('button', {
       },
       false: {
         all: 'unset',
+        whiteSpace: 'nowrap',
         border: '1px solid $purple100',
         borderRadius: '$full',
         padding: '$2 $4',
