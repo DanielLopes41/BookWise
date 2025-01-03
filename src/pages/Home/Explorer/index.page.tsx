@@ -37,12 +37,16 @@ interface Book {
 }
 
 export default function Explorer() {
+  const [postValue, setPostValue] = useState<number>(0)
   const [currentCategory, setCurrentCategory] = useState<string>('Tudo')
   const [searchBarChange, setSearchBarChange] = useState<string>('')
   const [searchParam, setSearchParam] = useState<string>('')
   const { status, data: sessionData } = useSession()
   const router = useRouter()
-
+  useEffect(() => {
+    const cookieValue = Cookies.get('PostLimit')
+    setPostValue(Number(cookieValue))
+  }, [])
   useEffect(() => {
     const Token = Cookies.get('GuestToken') || false
     if (status === 'unauthenticated' && !Token) {
@@ -174,6 +178,8 @@ export default function Explorer() {
                     />
                   </Trigger>
                   <BooksDialog
+                    postValue={postValue}
+                    setPostValue={setPostValue}
                     author={book.author}
                     coverUrl={book.cover_url}
                     name={book.name}

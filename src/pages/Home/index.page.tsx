@@ -15,7 +15,7 @@ import Aside from '@/Components/Aside'
 import { LastReading } from '@/Components/LastReading'
 import { HomeBookCard } from './HomeBookCard'
 import { useSession } from 'next-auth/react'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import { useQuery } from '@tanstack/react-query'
 import { api } from '../api/axios'
@@ -33,6 +33,7 @@ interface Rating {
   created_at: string
   rate: number
   title: string
+  book_id: number
 }
 
 interface Book {
@@ -46,7 +47,7 @@ interface Book {
 export default function Home() {
   const { status } = useSession()
   const router = useRouter()
-
+  const [postValue, setPostValue] = useState<number>(0)
   useEffect(() => {
     const Token = Cookies.get('GuestToken') || false
     if (status === 'unauthenticated' && !Token) {
@@ -77,6 +78,10 @@ export default function Home() {
       return response.data
     },
   })
+  useEffect(() => {
+    const cookieValue = Cookies.get('PostLimit')
+    setPostValue(Number(cookieValue))
+  }, [])
 
   const lastRating = OwnRatings?.[0]
   const popularBooks = Books.map((book) => {
@@ -93,7 +98,6 @@ export default function Home() {
   })
     .sort((a, b) => b.averageRate - a.averageRate)
     .slice(0, 4)
-
   return (
     <HomeContainer>
       <Aside />
@@ -127,10 +131,12 @@ export default function Home() {
                 />
               </Trigger>
               <BooksDialog
+                postValue={postValue}
+                setPostValue={setPostValue}
                 author={lastRating.author}
                 coverUrl={lastRating.coverUrl}
                 name={lastRating.title}
-                bookId={lastRating.id}
+                bookId={lastRating.book_id}
               />
             </Dialog.Root>
           </LastReadingContainer>
@@ -178,6 +184,8 @@ export default function Home() {
               />
             </BookCardTrigger>
             <BooksDialog
+              postValue={postValue}
+              setPostValue={setPostValue}
               author={book.author}
               coverUrl={book.cover_url}
               name={book.name}

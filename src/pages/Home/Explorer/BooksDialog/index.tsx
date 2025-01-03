@@ -1,6 +1,6 @@
 import * as Dialog from '@radix-ui/react-dialog'
 import { X } from 'phosphor-react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { useSession } from 'next-auth/react'
 import { api } from '@/pages/api/axios'
@@ -17,7 +17,7 @@ import { CommentCard } from './CommentCard'
 import AuthDialog from '../AuthDialog'
 import { WriteComment } from './WriteComment'
 import { NewCommentCard } from './NewCommentCard'
-
+import Cookies from 'js-cookie'
 interface Rating {
   user: {
     id: string
@@ -33,7 +33,7 @@ interface Book {
   name: string
   author: string
   coverUrl: string
-  bookId: string
+  bookId: number
   total_pages: number
   categories: string[]
   ratings: Rating[]
@@ -44,6 +44,8 @@ interface BooksDialogProps {
   author: string
   coverUrl: string
   bookId: number
+  postValue: number
+  setPostValue: React.Dispatch<React.SetStateAction<number>>
 }
 
 export function BooksDialog({
@@ -51,7 +53,15 @@ export function BooksDialog({
   coverUrl,
   name,
   bookId,
+  postValue,
+  setPostValue,
 }: BooksDialogProps) {
+  useEffect(() => {
+    const cookieValue = Cookies.get('PostLimit')
+    if (!cookieValue) {
+      setPostValue(0)
+    }
+  }, [])
   const { data: books = [] } = useQuery<Book[]>({
     queryKey: ['books'],
     queryFn: async () => {
@@ -59,6 +69,7 @@ export function BooksDialog({
       return response.data
     },
   })
+
   const [isOpenWriteComment, setOpenWriteComment] = useState(false)
   const { status } = useSession()
   const session = useSession()
@@ -125,7 +136,13 @@ export function BooksDialog({
             )}
           </span>
           <CommentList>
-            {isOpenWriteComment ? <WriteComment bookId={bookId} /> : null}
+            {isOpenWriteComment ? (
+              <WriteComment
+                postValue={postValue}
+                setPostValue={setPostValue}
+                bookId={bookId}
+              />
+            ) : null}
             {OwnComments.map((comment, index) => (
               <NewCommentCard
                 key={index}

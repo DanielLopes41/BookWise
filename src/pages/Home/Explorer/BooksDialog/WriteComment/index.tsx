@@ -20,10 +20,15 @@ import Cookies from 'js-cookie'
 
 export interface setNewCommentProps {
   bookId: number
+  postValue: number
+  setPostValue: React.Dispatch<React.SetStateAction<number>>
 }
 
-export function WriteComment({ bookId }: setNewCommentProps) {
-  const [postValue, setPostValue] = useState<number>(0)
+export function WriteComment({
+  bookId,
+  postValue,
+  setPostValue,
+}: setNewCommentProps) {
   const [TextAreaContent, setTextAreaContent] = useState<string>('')
 
   useEffect(() => {
@@ -31,6 +36,8 @@ export function WriteComment({ bookId }: setNewCommentProps) {
       setTextAreaContent(
         'Você não pode fazer mais posts durante 1 hora, faça login novamente quando o tempo terminar',
       )
+    } else {
+      setTextAreaContent('')
     }
   }, [postValue])
 
@@ -59,7 +66,6 @@ export function WriteComment({ bookId }: setNewCommentProps) {
     },
     onSuccess: () => {
       handleClearTextArea()
-      setPostValue(Number(Cookies.get('PostLimit')))
       Cookies.remove('PostLimit')
       setPostValue((state) => state - 1)
       Cookies.set('PostLimit', `${String(postValue)}`, { expires: 1 / 24 })
@@ -75,18 +81,10 @@ export function WriteComment({ bookId }: setNewCommentProps) {
   }
 
   async function handleSetNewComment() {
-    if (TextAreaContent !== '') {
+    if (TextAreaContent !== '' && postValue > 0) {
       await mutation.mutate()
     }
   }
-
-  useEffect(() => {
-    const cookieExists = !!Cookies.get('PostLimit')
-
-    if (!cookieExists) {
-      setPostValue(0)
-    }
-  }, [])
 
   return (
     <CommentContainer>
@@ -128,6 +126,7 @@ export function WriteComment({ bookId }: setNewCommentProps) {
 
             <span>
               <button
+                disabled={postValue <= 0}
                 onClick={() => {
                   if (postValue > 0) {
                     handleSetNewComment()
