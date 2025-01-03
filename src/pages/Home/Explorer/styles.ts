@@ -10,6 +10,10 @@ export const ExplorerMainContainer = styled('main', {
     width: '0px',
     background: 'transparent',
   },
+
+  '@media(max-width: 1600px)': {
+    gap: '2rem',
+  },
 })
 export const ExplorerContainer = styled('div', {
   marginTop: '$4',
