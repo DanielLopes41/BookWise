@@ -114,6 +114,7 @@ export function WriteComment({
           <TextContainer>
             <div>
               <textarea
+                readOnly={postValue === 0}
                 placeholder="Escreva sua avaliação"
                 rows={5}
                 value={TextAreaContent}
