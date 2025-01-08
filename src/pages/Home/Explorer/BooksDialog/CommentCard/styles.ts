@@ -43,6 +43,8 @@ export const AvatarContainer = styled('div', {
 export const TextContainer = styled('div', {
   display: 'flex',
   flexDirection: 'column',
+  width: '100%',
+  overflowWrap: 'break-word',
   gap: '$4',
   span: {
     h1: {

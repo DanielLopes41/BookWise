@@ -2,6 +2,7 @@ import { styled } from '@stitches/react'
 export const CommentContainer = styled('div', {
   backgroundColor: '$gray600',
   borderRadius: '8px',
+  width: 659,
   '&:hover': {
     cursor: 'pointer',
     outline: '2px solid $gray500',
@@ -37,7 +38,8 @@ export const TextContainer = styled('div', {
   flexDirection: 'column',
   gap: '$4',
   marginRight: 'auto',
-  width: '100%',
+  width: '80%',
+  overflowWrap: 'break-word',
   span: {
     h1: {
       fontSize: '$md',

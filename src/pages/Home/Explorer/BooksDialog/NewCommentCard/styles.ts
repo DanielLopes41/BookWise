@@ -46,6 +46,8 @@ export const TextContainer = styled('div', {
   display: 'flex',
   flexDirection: 'column',
   gap: '$4',
+  width: '100%',
+  overflowWrap: 'break-word',
   span: {
     h1: {
       fontSize: '$md',

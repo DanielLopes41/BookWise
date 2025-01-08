@@ -3,6 +3,8 @@ export const CommentContainer = styled('div', {
   backgroundColor: '$gray700',
   borderRadius: '8px',
   width: '65%',
+
+  minWidth: 400,
   margin: 'auto',
 })
 export const CommentContent = styled('div', {
@@ -39,6 +41,8 @@ export const TextContainer = styled('div', {
   flexDirection: 'column',
   gap: '$4',
   marginRight: 'auto',
+  width: '90%',
+
   section: {
     display: 'flex',
     flexDirection: 'column',
@@ -54,6 +58,7 @@ export const TextContainer = styled('div', {
     },
   },
   '> p': {
+    overflowWrap: 'break-word',
     color: '$gray300',
     fontWeigth: '160%',
   },
