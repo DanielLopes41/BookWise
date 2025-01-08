@@ -3,7 +3,7 @@ export const CommentContainer = styled('div', {
   backgroundColor: '$gray600',
   borderRadius: '8px',
   width: '100%',
-  minWidth:400,
+  minWidth: 400,
   '&:hover': {
     cursor: 'pointer',
     outline: '2px solid $gray500',
