@@ -2,7 +2,7 @@ import { styled } from '@stitches/react'
 export const CommentContainer = styled('div', {
   backgroundColor: '$gray600',
   borderRadius: '8px',
-  width: '65%',
+  width: '100%',
   '&:hover': {
     cursor: 'pointer',
     outline: '2px solid $gray500',
