@@ -45,9 +45,14 @@ export function buildNextAuthOptions(): NextAuthOptions {
     ],
     callbacks: {
       async signIn({ user }) {
-        if (!user.email) {
-          throw new Error('Email is required')
+        const existingUser = await prisma.user.findUnique({
+          where: { email: user.email },
+        })
+
+        if (existingUser) {
+          return true
         }
+
         return true
       },
       async session({ session, user }) {
