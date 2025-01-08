@@ -16,7 +16,11 @@ export default async function handler(
       const users = await prisma.user.findMany()
       const books = await prisma.book.findMany()
 
-      const completeRatings = ratings.map((rating) => {
+      const filteredRatings = ratings.filter(
+        (rating) => rating.user_id !== session?.user?.id,
+      )
+
+      const completeRatings = filteredRatings.map((rating) => {
         const user = users.find((user) => user.id === rating.user_id)
         const book = books.find((book) => book.id === rating.book_id)
 
@@ -30,12 +34,14 @@ export default async function handler(
           title: book?.name,
         }
       })
+
       return res.status(200).json(completeRatings)
     } catch (error) {
       console.error('Error fetching ratings:', error)
       return res.status(500).json({ error: 'Failed to fetch ratings' })
     }
   }
+
   if (req.method === 'POST') {
     if (!session) {
       return res.status(401).json({ error: 'Unauthorized' })
