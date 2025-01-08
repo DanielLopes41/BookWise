@@ -30,6 +30,7 @@ export const CommentListContainer = styled('div', {
     },
   },
   '> h1': {
+    minWidth: '400px',
     width: '65%',
     margin: '0 auto',
     display: 'flex',
@@ -51,7 +52,6 @@ export const CommentListContainer = styled('div', {
 export const CommentList = styled('span', {
   gap: '$4',
   display: 'flex',
-
   overflowY: 'scroll',
   flexDirection: 'column',
   paddingBottom: '51rem',
@@ -63,6 +63,7 @@ export const CommentList = styled('span', {
   },
 
   '& > span:first-child': {
+    minWidth: '400px',
     display: 'flex',
     justifyContent: 'space-between',
     marginInline: 'auto',
@@ -123,6 +124,10 @@ export const LastReadingContainer = styled('div', {
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
+  justifyContent: 'center',
+  '> span': {
+    minWidth: '400px',
+  },
   p: {
     color: '$gray100',
     fontSize: '$sm',
@@ -153,6 +158,7 @@ export const SeeAllButton = styled('button', {
 export const Trigger = styled(Dialog.Trigger, {
   all: 'unset',
   width: '65%',
+  minWidth: '400px',
 })
 export const BookCardTrigger = styled(Dialog.Trigger, {
   all: 'unset',
