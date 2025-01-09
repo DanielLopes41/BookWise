@@ -19,6 +19,8 @@
 - **PostgreSQL** como banco de dados, hospedado com **Prisma**
 - **Axios** e **React Query** para gerenciamento de requisições API
 - **Stitches** para estilização da interface
+- **JS-COOKIE** para gerenciamento de cookies
+- **Phosphor React** para ícones
 
 ## 📦 Instalação
 
@@ -56,4 +58,6 @@ Inicie o servidor de desenvolvimento:
 npm run dev
 
 
-Este projeto prático foi desenvolvido durante o curso Ignite da Rocketseat. 
+
+Este projeto prático foi desenvolvido durante o curso Ignite da Rocketseat.
+Além disso, foi implementado um limite de 20 posts por hora utilizando js-cookie.
