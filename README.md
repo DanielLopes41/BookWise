@@ -11,6 +11,7 @@
 - **Avaliações de Livros**: É possível avaliar livros e visualizar as avaliações feitas por outros usuários.
 - **Categorias de Livros**: Navegue por livros de diferentes categorias e veja as recomendações.
 - **Interface Simples e Funcional**: Desenvolvido com **Next.js** e **React**, com foco em usabilidade e performance.
+-  Além disso, foi implementado um limite de 20 posts por hora utilizando js-cookie.
 
 ## 🛠 Tecnologias Utilizadas
 
@@ -21,6 +22,7 @@
 - **Stitches** para estilização da interface
 - **JS-COOKIE** para gerenciamento de cookies
 - **Phosphor React** para ícones
+- **Radix UI** para modais acessíveis e estilizados.
 
 ## 📦 Instalação
 
@@ -60,4 +62,3 @@ npm run dev
 
 
 Este projeto prático foi desenvolvido durante o curso Ignite da Rocketseat.
-Além disso, foi implementado um limite de 20 posts por hora utilizando js-cookie.
