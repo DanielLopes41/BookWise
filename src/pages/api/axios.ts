@@ -1,5 +1,8 @@
 import axios from 'axios'
 
 export const api = axios.create({
-  baseURL: '/api',
+  baseURL:
+    process.env.NODE_ENV === 'development'
+      ? 'http://localhost:3000/api'
+      : process.env.NEXT_PUBLIC_API_URL,
 })

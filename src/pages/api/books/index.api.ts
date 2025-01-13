@@ -7,21 +7,7 @@ export default async function handler(
 ) {
   if (req.method === 'GET') {
     try {
-      const { category = 'Tudo' } = req.query
-
       const booksWithRatingsAndCategories = await prisma.book.findMany({
-        where:
-          category !== 'Tudo'
-            ? {
-                categories: {
-                  some: {
-                    category: {
-                      name: category as string,
-                    },
-                  },
-                },
-              }
-            : {},
         include: {
           ratings: {
             include: {

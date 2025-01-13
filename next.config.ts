@@ -1,5 +1,4 @@
 import type { NextConfig } from 'next'
-import { createRequire } from 'module'
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,

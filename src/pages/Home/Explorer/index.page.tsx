@@ -15,11 +15,11 @@ import * as Dialog from '@radix-ui/react-dialog'
 import { BooksDialog } from './BooksDialog'
 import { CategoryButton } from './CategoryButton'
 import { api } from '@/pages/api/axios'
-import { useQuery } from '@tanstack/react-query'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import Cookies from 'js-cookie'
 import { useSession } from 'next-auth/react'
+import { GetStaticProps } from 'next'
 
 interface Rating {
   user: {
@@ -36,7 +36,7 @@ interface Book {
   ratings: Rating[]
 }
 
-export default function Explorer() {
+export default function Explorer({ Books }: { Books: Book[] }) {
   const [postValue, setPostValue] = useState<number>(0)
   const [currentCategory, setCurrentCategory] = useState<string>('Tudo')
   const [searchBarChange, setSearchBarChange] = useState<string>('')
@@ -53,18 +53,6 @@ export default function Explorer() {
       router.push('/')
     }
   }, [status, router])
-
-  const { data: Books = [] } = useQuery<Book[]>({
-    queryKey: ['books', currentCategory],
-    queryFn: async () => {
-      const response = await api.get('/books', {
-        params: {
-          category: currentCategory,
-        },
-      })
-      return response.data
-    },
-  })
 
   const handleCategoryClick = (category: string) => {
     setCurrentCategory(category)
@@ -85,14 +73,17 @@ export default function Explorer() {
       clearSearchBarChange()
     }
   }
-
+  const filteredBooksByCategory =
+    currentCategory === 'Tudo'
+      ? Books
+      : Books.filter((book) => book.categories.includes(currentCategory))
   const filteredBooks = searchParam
     ? Books.filter(
         (book) =>
           book.name.toLowerCase().includes(searchParam.toLowerCase()) ||
           book.author.toLowerCase().includes(searchParam.toLowerCase()),
       )
-    : Books
+    : false
 
   const getBookColumns = (books: Book[]): Book[][] => {
     const columns: Book[][] = []
@@ -102,7 +93,7 @@ export default function Explorer() {
     return columns
   }
 
-  const columns = getBookColumns(filteredBooks)
+  const columns = getBookColumns(filteredBooks || filteredBooksByCategory)
 
   return (
     <ExplorerMainContainer>
@@ -193,4 +184,21 @@ export default function Explorer() {
       </ExplorerContainer>
     </ExplorerMainContainer>
   )
+}
+export const getStaticProps: GetStaticProps = async () => {
+  try {
+    const response = await api.get('/books')
+    return {
+      props: {
+        Books: response.data || [],
+      },
+    }
+  } catch (error) {
+    console.error('Erro ao buscar os livros:', error)
+    return {
+      props: {
+        Books: [],
+      },
+    }
+  }
 }
