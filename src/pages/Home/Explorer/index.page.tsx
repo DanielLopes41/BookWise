@@ -71,6 +71,9 @@ export default function Explorer({ Books }: { Books: Book[] }) {
       event.preventDefault()
       setSearchParam(searchBarChange)
       clearSearchBarChange()
+      if (searchBarChange === '') {
+        setCurrentCategory('Tudo')
+      }
     }
   }
   const filteredBooksByCategory =
