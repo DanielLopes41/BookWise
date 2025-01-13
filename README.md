@@ -11,6 +11,7 @@
 - **Avaliações de Livros**: É possível avaliar livros e visualizar as avaliações feitas por outros usuários.
 - **Categorias de Livros**: Navegue por livros de diferentes categorias e veja as recomendações.
 - **Interface Simples e Funcional**: Desenvolvido com **Next.js** e **React**, com foco em usabilidade e performance.
+-  Além disso, foi implementado um limite de 20 posts por hora utilizando js-cookie.
 
 ## 🛠 Tecnologias Utilizadas
 
@@ -19,6 +20,9 @@
 - **PostgreSQL** como banco de dados, hospedado com **Prisma**
 - **Axios** e **React Query** para gerenciamento de requisições API
 - **Stitches** para estilização da interface
+- **JS-COOKIE** para gerenciamento de cookies
+- **Phosphor React** para ícones
+- **Radix UI** para modais acessíveis e estilizados.
 
 ## 📦 Instalação
 
@@ -56,4 +60,5 @@ Inicie o servidor de desenvolvimento:
 npm run dev
 
 
-Este projeto prático foi desenvolvido durante o curso Ignite da Rocketseat. 
+
+Este projeto prático foi desenvolvido durante o curso Ignite da Rocketseat.
